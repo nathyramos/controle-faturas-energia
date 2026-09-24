@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Controle de Faturas de Energia</title>
+<style>
+:root{
+  --bg:#f4f6f8; --card:#ffffff; --text:#1a2230; --muted:#5b6673; --border:#e2e6ea;
+  --accent:#2563eb; --accent-soft:#eaf1ff;
+  --green:#16a34a; --green-soft:#e8f8ee;
+  --orange:#d97706; --orange-soft:#fff3e0;
+  --red:#dc2626; --red-soft:#fdeaea;
+  --shadow: 0 1px 3px rgba(20,30,50,.06), 0 1px 2px rgba(20,30,50,.08);
+  box-sizing:border-box;
+  padding-top: env(safe-area-inset-top,0px);
+  padding-bottom: env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#12161c; --card:#1a1f27; --text:#e7ebef; --muted:#8a94a1; --border:#2a3038;
+    --accent:#5b8def; --accent-soft:#1c2a42;
+    --green:#3ecf7a; --green-soft:#12291c;
+    --orange:#f2a93b; --orange-soft:#2e2312;
+    --red:#f16565; --red-soft:#2e1717;
+    --shadow: 0 1px 3px rgba(0,0,0,.4);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#12161c; --card:#1a1f27; --text:#e7ebef; --muted:#8a94a1; --border:#2a3038;
+  --accent:#5b8def; --accent-soft:#1c2a42;
+  --green:#3ecf7a; --green-soft:#12291c;
+  --orange:#f2a93b; --orange-soft:#2e2312;
+  --red:#f16565; --red-soft:#2e1717;
+  --shadow: 0 1px 3px rgba(0,0,0,.4);
+}
+html{scroll-padding-top: env(safe-area-inset-top,0px);}
+*{box-sizing:border-box;}
+body{
+  margin:0; min-height:100%;
+  background:var(--bg); color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+.wrap{max-width:1100px;margin:0 auto;padding:24px 18px 60px;}
+header{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:6px;}
+h1{font-size:22px;margin:0 0 4px;}
+.sub{color:var(--muted);font-size:13.5px;margin:0;}
+.header-actions{display:flex;gap:8px;flex-wrap:wrap;}
+.hint{font-size:12.5px;color:var(--muted);margin-bottom:18px;}
+.alert-banner{
+  display:none;align-items:center;justify-content:space-between;gap:12px;
+  padding:12px 16px;border-radius:12px;margin-bottom:16px;font-size:13.5px;font-weight:600;
+}
+.alert-banner.show{display:flex;}
+.alert-banner.red{background:var(--red-soft);color:var(--red);}
+.alert-banner.orange{background:var(--orange-soft);color:var(--orange);}
+.alert-banner button{
+  background:none;border:none;font-size:18px;cursor:pointer;color:inherit;line-height:1;
+}
+.btn{
+  border:none;border-radius:10px;padding:10px 16px;font-size:14px;font-weight:600;
+  cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:opacity .15s;
+}
+.btn:hover{opacity:.88;}
+.btn-primary{background:var(--accent);color:#fff;}
+.btn-ghost{background:var(--card);color:var(--text);border:1px solid var(--border);}
+.btn-sm{padding:6px 10px;font-size:12.5px;border-radius:8px;}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:22px;}
+.stat{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px 16px;box-shadow:var(--shadow);}
+.stat .label{font-size:12px;color:var(--muted);margin-bottom:4px;}
+.stat .value{font-size:20px;font-weight:700;}
+.stat .value.red{color:var(--red);}
+.stat .value.orange{color:var(--orange);}
+.toolbar{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;align-items:center;}
+input[type=text],input[type=number],input[type=date],select{
+  background:var(--card);border:1px solid var(--border);color:var(--text);
+  border-radius:8px;padding:8px 10px;font-size:14px;width:100%;
+}
+.search{flex:1;min-width:180px;}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;}
+.card{
+  background:var(--card);border:1px solid var(--border);border-radius:16px;
+  padding:16px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:10px;
+}
+.card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;}
+.card h3{margin:0;font-size:16px;}
+.card .addr{color:var(--muted);font-size:12.5px;margin-top:2px;}
+.badge{
+  font-size:11.5px;font-weight:700;padding:4px 9px;border-radius:999px;white-space:nowrap;
+}
+.badge-green{background:var(--green-soft);color:var(--green);}
+.badge-orange{background:var(--orange-soft);color:var(--orange);}
+.badge-red{background:var(--red-soft);color:var(--red);}
+.pulse{animation:pulse 1.6s infinite;}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(220,38,38,.35);}50%{box-shadow:0 0 0 5px rgba(220,38,38,0);}}
+.meta-row{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12.5px;color:var(--muted);}
+.meta-row b{color:var(--text);font-weight:600;}
+.next-info{font-size:13px;padding:8px 10px;border-radius:10px;background:var(--accent-soft);color:var(--text);}
+.card-actions{display:flex;gap:8px;margin-top:auto;flex-wrap:wrap;}
+.history{border-top:1px dashed var(--border);padding-top:8px;margin-top:2px;display:none;font-size:12.5px;}
+.history.open{display:block;}
+.history-scroll{overflow-x:auto;}
+.history table{width:100%;border-collapse:collapse;table-layout:auto;}
+.history th,.history td{text-align:left;padding:4px 6px;border-bottom:1px solid var(--border);white-space:nowrap;}
+.history th{color:var(--muted);font-weight:600;}
+.btn-edit-fatura{
+  background:none;border:1px solid var(--border);border-radius:6px;
+  width:26px;height:26px;padding:0;font-size:12px;cursor:pointer;color:var(--text);
+  display:inline-flex;align-items:center;justify-content:center;
+}
+.btn-edit-fatura:hover{opacity:.8;}
+.pill-pago{color:var(--green);font-weight:600;}
+.pill-pendente{color:var(--orange);font-weight:600;}
+.pill-enviada{color:var(--accent);font-weight:600;}
+.pill-baixada{color:var(--muted);font-weight:600;}
+.empty{text-align:center;color:var(--muted);padding:50px 10px;}
+.overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;align-items:center;justify-content:center;
+  padding:20px;z-index:50;
+}
+.overlay.open{display:flex;}
+.modal{
+  background:var(--card);border-radius:16px;padding:22px;max-width:440px;width:100%;
+  max-height:88vh;overflow-y:auto;box-shadow:var(--shadow);position:relative;
+}
+.modal h2{margin:0 0 14px;font-size:18px;}
+.field{margin-bottom:12px;}
+.field label{display:block;font-size:12.5px;color:var(--muted);margin-bottom:4px;font-weight:600;}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:16px;}
+.close-x{position:absolute;top:14px;right:16px;background:none;border:none;font-size:20px;color:var(--muted);cursor:pointer;}
+.threshold-box{display:flex;gap:8px;align-items:center;font-size:13px;color:var(--muted);margin-bottom:16px;flex-wrap:wrap;}
+.threshold-box input{width:60px;}
+#importFile{position:absolute;width:1px;height:1px;opacity:0;overflow:hidden;z-index:-1;}
+.toast-wrap{
+  position:fixed;bottom:20px;left:50%;transform:translateX(-50%);
+  z-index:100;display:flex;flex-direction:column;gap:8px;align-items:center;
+  padding-bottom: env(safe-area-inset-bottom,0px);
+}
+.toast{
+  background:var(--text);color:var(--bg);padding:10px 16px;border-radius:10px;
+  font-size:13.5px;font-weight:600;box-shadow:var(--shadow);opacity:0;transform:translateY(8px);
+  transition:opacity .2s, transform .2s;max-width:90vw;
+}
+.toast.show{opacity:1;transform:translateY(0);}
+.toast.err{background:var(--red);color:#fff;}
+.toast.ok{background:var(--green);color:#fff;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <h1>⚡ Controle de Faturas de Energia</h1>
+      <p class="sub">Cadastro de imóveis, código do cliente/CPF-CNPJ e alertas de leitura</p>
+    </div>
+    <div class="header-actions">
+      <button class="btn btn-ghost" id="themeToggle" title="Alternar tema claro/escuro">🌙</button>
+      <button class="btn btn-ghost" id="btnExportar">⭳ Exportar</button>
+      <button class="btn btn-ghost" id="btnImportar">⭱ Importar</button>
+      <input type="file" id="importFile" accept=".json,.txt,application/json,text/plain">
+      <button class="btn btn-primary" id="btnNovoImovel">+ Novo imóvel</button>
+    </div>
+  </header>
+  <p class="hint">Os dados ficam salvos apenas neste navegador. Use "Exportar" para gerar um arquivo e enviar para a outra pessoa, e "Importar" para trazer os dados de um arquivo recebido.</p>
+
+  <div class="alert-banner" id="alertBanner">
+    <span id="alertBannerText"></span>
+    <button id="alertBannerClose">&times;</button>
+  </div>
+
+  <div class="stats" id="stats"></div>
+
+  <div class="threshold-box">
+    <span>Alertar quando faltarem</span>
+    <input type="number" id="alertDays" min="1" max="30" value="7">
+    <span>dias ou menos para a próxima leitura</span>
+  </div>
+
+  <div class="toolbar">
+    <input type="text" class="search" id="search" placeholder="Buscar por imóvel, código do cliente ou CPF/CNPJ...">
+    <select id="filterStatus">
+      <option value="todos">Todos os status</option>
+      <option value="atrasado">Leitura atrasada</option>
+      <option value="urgente">Urgente (vermelho)</option>
+      <option value="atencao">Atenção (laranja)</option>
+      <option value="ok">Ok (verde)</option>
+    </select>
+  </div>
+
+  <div class="grid" id="grid"></div>
+  <div class="empty" id="emptyMsg" style="display:none;">Nenhum imóvel cadastrado ainda. Clique em "+ Novo imóvel" para começar.</div>
+</div>
+
+<div class="overlay" id="overlayImovel">
+  <div class="modal">
+    <button class="close-x" data-close>&times;</button>
+    <h2 id="modalImovelTitle">Novo imóvel</h2>
+    <input type="hidden" id="imovelId">
+    <div class="field">
+      <label>Nome do imóvel</label>
+      <input type="text" id="imovelNome" placeholder="Ex: Alojamento 3 / Escritório central">
+    </div>
+    <div class="field">
+      <label>Endereço</label>
+      <input type="text" id="imovelEndereco" placeholder="Endereço completo">
+    </div>
+    <div class="field-row">
+      <div class="field">
+        <label>Código do cliente</label>
+        <input type="text" id="imovelCodigo" placeholder="Ex: 123456789">
+      </div>
+      <div class="field">
+        <label>CPF/CNPJ</label>
+        <input type="text" id="imovelDocumento" placeholder="000.000.000-00">
+      </div>
+    </div>
+    <div class="field">
+      <label>Dia habitual de leitura (1–31)</label>
+      <input type="number" id="imovelDiaLeitura" min="1" max="31" placeholder="Ex: 15">
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" data-close>Cancelar</button>
+      <button class="btn btn-primary" id="salvarImovel">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="overlayFatura">
+  <div class="modal">
+    <button class="close-x" data-close>&times;</button>
+    <h2 id="modalFaturaTitle">Lançar fatura</h2>
+    <input type="hidden" id="faturaImovelId">
+    <input type="hidden" id="faturaId">
+    <div class="field-row">
+      <div class="field">
+        <label>Data da leitura</label>
+        <input type="date" id="faturaDataLeitura">
+      </div>
+      <div class="field">
+        <label>Vencimento</label>
+        <input type="date" id="faturaVencimento">
+      </div>
+    </div>
+    <div class="field-row">
+      <div class="field">
+        <label>Valor (R$)</label>
+        <input type="number" step="0.01" id="faturaValor" placeholder="0,00">
+      </div>
+      <div class="field">
+        <label>Consumo (kWh)</label>
+        <input type="number" id="faturaConsumo" placeholder="0">
+      </div>
+    </div>
+    <div class="field">
+      <label>Status</label>
+      <select id="faturaStatus">
+        <option value="pendente">Pendente</option>
+        <option value="enviada">Enviada</option>
+        <option value="baixada">Baixada</option>
+        <option value="pago">Pago</option>
+      </select>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" data-close>Cancelar</button>
+      <button class="btn btn-primary" id="salvarFatura">Salvar fatura</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-wrap" id="toastWrap"></div>
+
+<div class="overlay" id="overlayConfirm">
+  <div class="modal">
+    <h2 id="confirmTitle">Confirmar</h2>
+    <p id="confirmMessage" style="font-size:13.5px;color:var(--muted);white-space:pre-line;"></p>
+    <div class="modal-actions" id="confirmActions"></div>
+  </div>
+</div>
+
+<script>
+const LOCAL_KEY = "energia_imoveis_v1";
+let imoveis = [];
+let expandedCards = new Set();
+let downloadsCap = null;
+
+function loadData(){
+  try{
+    const raw = localStorage.getItem(LOCAL_KEY);
+    imoveis = raw ? JSON.parse(raw) : [];
+  }catch(e){
+    console.error("Erro ao carregar dados", e);
+    imoveis = [];
+  }
+}
+function saveData(){
+  try{ localStorage.setItem(LOCAL_KEY, JSON.stringify(imoveis)); }
+  catch(e){ console.error("Erro ao salvar dados", e); }
+}
+
+function uid(){ return Date.now().toString(36) + Math.random().toString(36).slice(2,7); }
+
+// ---- Tema claro/escuro (alternância manual) ----
+const THEME_KEY = "energia_theme_v1";
+function isEffectivelyDark(){
+  const current = document.documentElement.getAttribute("data-theme");
+  if(current === "dark") return true;
+  if(current === "light") return false;
+  return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+}
+function updateThemeIcon(){
+  const btn = document.getElementById("themeToggle");
+  if(btn) btn.textContent = isEffectivelyDark() ? "☀️" : "🌙";
+}
+function applyTheme(theme){
+  if(theme === "light" || theme === "dark"){
+    document.documentElement.setAttribute("data-theme", theme);
+  } else {
+    document.documentElement.removeAttribute("data-theme");
+  }
+  updateThemeIcon();
+}
+document.getElementById("themeToggle").addEventListener("click", ()=>{
+  const next = isEffectivelyDark() ? "light" : "dark";
+  try{ localStorage.setItem(THEME_KEY, next); }catch(e){}
+  applyTheme(next);
+});
+try{
+  applyTheme(localStorage.getItem(THEME_KEY));
+}catch(e){
+  applyTheme(null);
+}
+
+function showToast(msg, type){
+  const wrap = document.getElementById("toastWrap");
+  const el = document.createElement("div");
+  el.className = "toast" + (type ? " "+type : "");
+  el.textContent = msg;
+  wrap.appendChild(el);
+  requestAnimationFrame(()=> el.classList.add("show"));
+  setTimeout(()=>{
+    el.classList.remove("show");
+    setTimeout(()=> el.remove(), 250);
+  }, 3200);
+}
+
+function showConfirm(message, options){
+  // options: {title, buttons:[{label, value, primary}]}
+  return new Promise((resolve)=>{
+    const overlay = document.getElementById("overlayConfirm");
+    document.getElementById("confirmTitle").textContent = options.title || "Confirmar";
+    document.getElementById("confirmMessage").textContent = message;
+    const actions = document.getElementById("confirmActions");
+    actions.innerHTML = "";
+    options.buttons.forEach(btn=>{
+      const b = document.createElement("button");
+      b.className = "btn " + (btn.primary ? "btn-primary" : "btn-ghost");
+      b.textContent = btn.label;
+      b.addEventListener("click", ()=>{
+        overlay.classList.remove("open");
+        resolve(btn.value);
+      });
+      actions.appendChild(b);
+    });
+    overlay.classList.add("open");
+  });
+}
+
+function parseDate(str){
+  if(!str) return null;
+  const d = new Date(str + "T00:00:00");
+  return isNaN(d.getTime()) ? null : d;
+}
+function fmtDate(str){
+  const d = parseDate(str);
+  if(!d) return "—";
+  return d.toLocaleDateString("pt-BR");
+}
+function daysBetween(a,b){
+  return Math.round((a - b) / (1000*60*60*24));
+}
+
+function getLastFatura(imovel){
+  if(!imovel.faturas || imovel.faturas.length === 0) return null;
+  return [...imovel.faturas].sort((a,b)=> new Date(b.dataLeitura) - new Date(a.dataLeitura))[0];
+}
+
+function getNextReadingDate(imovel){
+  const last = getLastFatura(imovel);
+  const today = new Date(); today.setHours(0,0,0,0);
+  if(last && last.dataLeitura){
+    const base = parseDate(last.dataLeitura);
+    const next = new Date(base);
+    next.setDate(next.getDate() + 30);
+    return next;
+  }
+  if(imovel.diaLeitura){
+    const dia = parseInt(imovel.diaLeitura,10);
+    let candidate = new Date(today.getFullYear(), today.getMonth(), dia);
+    if(candidate < today){
+      candidate = new Date(today.getFullYear(), today.getMonth()+1, dia);
+    }
+    return candidate;
+  }
+  return null;
+}
+
+function getAlertLevel(imovel, thresholdDays){
+  const next = getNextReadingDate(imovel);
+  if(!next) return {level:"none", days:null};
+  const today = new Date(); today.setHours(0,0,0,0);
+  const days = daysBetween(next, today);
+  if(days < 0) return {level:"atrasado", days};
+  if(days <= 2) return {level:"urgente", days};
+  if(days <= thresholdDays) return {level:"atencao", days};
+  return {level:"ok", days};
+}
+
+function badgeFor(alert){
+  switch(alert.level){
+    case "atrasado": return `<span class="badge badge-red pulse">Leitura atrasada (${Math.abs(alert.days)}d)</span>`;
+    case "urgente": return `<span class="badge badge-red">Urgente · ${alert.days}d</span>`;
+    case "atencao": return `<span class="badge badge-orange">Atenção · ${alert.days}d</span>`;
+    case "ok": return `<span class="badge badge-green">Ok · ${alert.days}d</span>`;
+    default: return `<span class="badge badge-orange">Sem leitura definida</span>`;
+  }
+}
+
+function statusLabel(status){
+  switch(status){
+    case "pago": return "Pago";
+    case "enviada": return "Enviada";
+    case "baixada": return "Baixada";
+    default: return "Pendente";
+  }
+}
+
+function escapeHtml(str){
+  return String(str).replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+
+function renderStats(){
+  const thresholdDays = parseInt(document.getElementById("alertDays").value,10) || 7;
+  let atrasados=0, urgentes=0, atencao=0, ok=0;
+  let gastoMes=0;
+  const mesAtual = new Date().toISOString().slice(0,7);
+  imoveis.forEach(im=>{
+    const a = getAlertLevel(im, thresholdDays);
+    if(a.level==="atrasado") atrasados++;
+    else if(a.level==="urgente") urgentes++;
+    else if(a.level==="atencao") atencao++;
+    else if(a.level==="ok") ok++;
+    (im.faturas||[]).forEach(f=>{
+      if(f.dataLeitura && f.dataLeitura.slice(0,7)===mesAtual){
+        gastoMes += parseFloat(f.valor)||0;
+      }
+    });
+  });
+  const alertasAtivos = atrasados+urgentes+atencao;
+  document.getElementById("stats").innerHTML = `
+    <div class="stat"><div class="label">Imóveis cadastrados</div><div class="value">${imoveis.length}</div></div>
+    <div class="stat"><div class="label">Alertas ativos</div><div class="value ${alertasAtivos>0?'red':''}">${alertasAtivos}</div></div>
+    <div class="stat"><div class="label">Leituras atrasadas</div><div class="value ${atrasados>0?'red':''}">${atrasados}</div></div>
+    <div class="stat"><div class="label">Gasto no mês atual</div><div class="value">R$ ${gastoMes.toFixed(2).replace('.',',')}</div></div>
+  `;
+}
+
+function renderGrid(){
+  const search = document.getElementById("search").value.trim().toLowerCase();
+  const filterStatus = document.getElementById("filterStatus").value;
+  const thresholdDays = parseInt(document.getElementById("alertDays").value,10) || 7;
+
+  let list = imoveis.filter(im=>{
+    const matchSearch = !search ||
+      (im.nome||"").toLowerCase().includes(search) ||
+      (im.codigoCliente||"").toLowerCase().includes(search) ||
+      (im.documento||"").toLowerCase().includes(search);
+    if(!matchSearch) return false;
+    if(filterStatus==="todos") return true;
+    const a = getAlertLevel(im, thresholdDays);
+    return a.level === filterStatus;
+  });
+
+  const grid = document.getElementById("grid");
+  const emptyMsg = document.getElementById("emptyMsg");
+  if(imoveis.length===0){
+    grid.innerHTML=""; emptyMsg.style.display="block"; return;
+  }
+  emptyMsg.style.display="none";
+  if(list.length===0){
+    grid.innerHTML = `<div class="empty" style="grid-column:1/-1;">Nenhum imóvel encontrado com esse filtro.</div>`;
+    return;
+  }
+
+  grid.innerHTML = list.map(im=>{
+    const alert = getAlertLevel(im, thresholdDays);
+    const next = getNextReadingDate(im);
+    const last = getLastFatura(im);
+    const isOpen = expandedCards.has(im.id);
+    const historyRows = (im.faturas||[])
+      .slice()
+      .sort((a,b)=> new Date(b.dataLeitura)-new Date(a.dataLeitura))
+      .map(f=>`
+        <tr>
+          <td>${fmtDate(f.dataLeitura)}</td>
+          <td>R$ ${(parseFloat(f.valor)||0).toFixed(2).replace('.',',')}</td>
+          <td>${f.consumo ?? '—'} kWh</td>
+          <td>${fmtDate(f.vencimento)}</td>
+          <td class="pill-${f.status||'pendente'}">${statusLabel(f.status)}</td>
+          <td><button class="btn-edit-fatura" data-edit-fatura="${im.id}|${f.id}" title="Editar fatura">✎</button></td>
+        </tr>`).join("") || `<tr><td colspan="6" style="color:var(--muted);">Nenhuma fatura lançada</td></tr>`;
+
+    return `
+    <div class="card">
+      <div class="card-top">
+        <div>
+          <h3>${escapeHtml(im.nome||"(sem nome)")}</h3>
+          <div class="addr">${escapeHtml(im.endereco||"")}</div>
+        </div>
+        ${badgeFor(alert)}
+      </div>
+      <div class="meta-row">
+        <span><b>Código:</b> ${escapeHtml(im.codigoCliente||"—")}</span>
+        <span><b>CPF/CNPJ:</b> ${escapeHtml(im.documento||"—")}</span>
+      </div>
+      <div class="next-info">
+        📅 Próxima leitura estimada: <b>${next ? next.toLocaleDateString("pt-BR") : "defina o dia de leitura"}</b>
+        ${last ? `· Última fatura: R$ ${(parseFloat(last.valor)||0).toFixed(2).replace('.',',')}` : ""}
+      </div>
+      <div class="card-actions">
+        <button class="btn btn-primary btn-sm" data-fatura="${im.id}">+ Lançar fatura</button>
+        <button class="btn btn-ghost btn-sm" data-toggle="${im.id}">${isOpen? "Ocultar histórico":"Ver histórico"}</button>
+        <button class="btn btn-ghost btn-sm" data-edit="${im.id}">Editar</button>
+        <button class="btn btn-ghost btn-sm" data-del="${im.id}">Excluir</button>
+      </div>
+      <div class="history ${isOpen?'open':''}">
+        <div class="history-scroll">
+        <table>
+          <thead><tr><th>Leitura</th><th>Valor</th><th>Consumo</th><th>Vencimento</th><th>Status</th><th></th></tr></thead>
+          <tbody>${historyRows}</tbody>
+        </table>
+        </div>
+      </div>
+    </div>`;
+  }).join("");
+}
+
+function renderAll(){
+  renderStats();
+  renderGrid();
+}
+
+// Modal imóvel
+const overlayImovel = document.getElementById("overlayImovel");
+document.getElementById("btnNovoImovel").addEventListener("click", ()=>{
+  document.getElementById("modalImovelTitle").textContent = "Novo imóvel";
+  document.getElementById("imovelId").value = "";
+  document.getElementById("imovelNome").value = "";
+  document.getElementById("imovelEndereco").value = "";
+  document.getElementById("imovelCodigo").value = "";
+  document.getElementById("imovelDocumento").value = "";
+  document.getElementById("imovelDiaLeitura").value = "";
+  overlayImovel.classList.add("open");
+});
+
+document.getElementById("salvarImovel").addEventListener("click", ()=>{
+  const id = document.getElementById("imovelId").value;
+  const nome = document.getElementById("imovelNome").value.trim();
+  if(!nome){ showToast("Informe o nome do imóvel.", "err"); return; }
+  const data = {
+    nome,
+    endereco: document.getElementById("imovelEndereco").value.trim(),
+    codigoCliente: document.getElementById("imovelCodigo").value.trim(),
+    documento: document.getElementById("imovelDocumento").value.trim(),
+    diaLeitura: document.getElementById("imovelDiaLeitura").value.trim(),
+  };
+  if(id){
+    const im = imoveis.find(x=>x.id===id);
+    if(im) Object.assign(im, data);
+  } else {
+    imoveis.push({ id: uid(), ...data, faturas: [] });
+  }
+  saveData();
+  overlayImovel.classList.remove("open");
+  renderAll();
+});
+
+// Modal fatura
+const overlayFatura = document.getElementById("overlayFatura");
+document.getElementById("salvarFatura").addEventListener("click", ()=>{
+  const imovelId = document.getElementById("faturaImovelId").value;
+  const faturaId = document.getElementById("faturaId").value;
+  const im = imoveis.find(x=>x.id===imovelId);
+  if(!im) return;
+  const dataLeitura = document.getElementById("faturaDataLeitura").value;
+  if(!dataLeitura){ showToast("Informe a data da leitura.", "err"); return; }
+  im.faturas = im.faturas || [];
+  const dadosFatura = {
+    dataLeitura,
+    vencimento: document.getElementById("faturaVencimento").value,
+    valor: document.getElementById("faturaValor").value,
+    consumo: document.getElementById("faturaConsumo").value,
+    status: document.getElementById("faturaStatus").value,
+  };
+  if(faturaId){
+    const idx = im.faturas.findIndex(f=>f.id===faturaId);
+    if(idx > -1) im.faturas[idx] = { id: faturaId, ...dadosFatura };
+  } else {
+    im.faturas.push({ id: uid(), ...dadosFatura });
+  }
+  saveData();
+  overlayFatura.classList.remove("open");
+  renderAll();
+});
+
+// Delegação de eventos no grid
+document.getElementById("grid").addEventListener("click", (e)=>{
+  const t = e.target;
+  if(t.dataset.fatura){
+    document.getElementById("modalFaturaTitle").textContent = "Lançar fatura";
+    document.getElementById("faturaImovelId").value = t.dataset.fatura;
+    document.getElementById("faturaId").value = "";
+    document.getElementById("faturaDataLeitura").value = "";
+    document.getElementById("faturaVencimento").value = "";
+    document.getElementById("faturaValor").value = "";
+    document.getElementById("faturaConsumo").value = "";
+    document.getElementById("faturaStatus").value = "pendente";
+    overlayFatura.classList.add("open");
+  }
+  if(t.dataset.editFatura){
+    const [imovelId, faturaId] = t.dataset.editFatura.split("|");
+    const im = imoveis.find(x=>x.id===imovelId);
+    const f = im && (im.faturas||[]).find(x=>x.id===faturaId);
+    if(!f) return;
+    document.getElementById("modalFaturaTitle").textContent = "Editar fatura";
+    document.getElementById("faturaImovelId").value = imovelId;
+    document.getElementById("faturaId").value = faturaId;
+    document.getElementById("faturaDataLeitura").value = f.dataLeitura||"";
+    document.getElementById("faturaVencimento").value = f.vencimento||"";
+    document.getElementById("faturaValor").value = f.valor||"";
+    document.getElementById("faturaConsumo").value = f.consumo||"";
+    document.getElementById("faturaStatus").value = f.status||"pendente";
+    overlayFatura.classList.add("open");
+  }
+  if(t.dataset.toggle){
+    const id = t.dataset.toggle;
+    if(expandedCards.has(id)) expandedCards.delete(id); else expandedCards.add(id);
+    renderGrid();
+  }
+  if(t.dataset.edit){
+    const im = imoveis.find(x=>x.id===t.dataset.edit);
+    if(!im) return;
+    document.getElementById("modalImovelTitle").textContent = "Editar imóvel";
+    document.getElementById("imovelId").value = im.id;
+    document.getElementById("imovelNome").value = im.nome||"";
+    document.getElementById("imovelEndereco").value = im.endereco||"";
+    document.getElementById("imovelCodigo").value = im.codigoCliente||"";
+    document.getElementById("imovelDocumento").value = im.documento||"";
+    document.getElementById("imovelDiaLeitura").value = im.diaLeitura||"";
+    overlayImovel.classList.add("open");
+  }
+  if(t.dataset.del){
+    showConfirm("Excluir este imóvel e todo o histórico de faturas?", {
+      title: "Excluir imóvel",
+      buttons: [
+        {label:"Cancelar", value:false},
+        {label:"Excluir", value:true, primary:true}
+      ]
+    }).then(confirmado=>{
+      if(confirmado){
+        imoveis = imoveis.filter(x=>x.id!==t.dataset.del);
+        saveData();
+        renderAll();
+        showToast("Imóvel excluído.", "ok");
+      }
+    });
+  }
+});
+
+document.querySelectorAll("[data-close]").forEach(btn=>{
+  btn.addEventListener("click", ()=>{
+    overlayImovel.classList.remove("open");
+    overlayFatura.classList.remove("open");
+  });
+});
+
+document.getElementById("search").addEventListener("input", renderGrid);
+document.getElementById("filterStatus").addEventListener("change", renderGrid);
+document.getElementById("alertDays").addEventListener("input", renderAll);
+
+// ---- Exportar ----
+document.getElementById("btnExportar").addEventListener("click", async ()=>{
+  const payload = JSON.stringify({ imoveis, exportadoEm: new Date().toISOString() }, null, 2);
+  const filename = `faturas-energia-${new Date().toISOString().slice(0,10)}.txt`;
+  if(downloadsCap){
+    try{
+      await downloadsCap.save({ filename, data: payload });
+      showToast("Arquivo exportado.", "ok");
+    }catch(e){
+      console.error("Erro ao exportar via downloads", e);
+      if(e && e.code === "declined") return;
+      showToast("Não foi possível gerar o arquivo de exportação.", "err");
+    }
+    return;
+  }
+  // Fora do ambiente claude.ai (painel hospedado em outro lugar): download tradicional do navegador
+  try{
+    const blob = new Blob([payload], {type:"text/plain;charset=utf-8"});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url; a.download = filename;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    showToast("Arquivo exportado.", "ok");
+  }catch(e){
+    console.error("Erro ao exportar", e);
+    showToast("Não foi possível gerar o arquivo de exportação.", "err");
+  }
+});
+
+// ---- Importar ----
+const importFile = document.getElementById("importFile");
+document.getElementById("btnImportar").addEventListener("click", ()=> importFile.click());
+importFile.addEventListener("change", (e)=>{
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = async ()=>{
+    try{
+      const parsed = JSON.parse(reader.result);
+      const importados = Array.isArray(parsed) ? parsed : parsed.imoveis;
+      if(!Array.isArray(importados)) throw new Error("Formato inválido");
+
+      let modoSubstituir = false;
+      if(imoveis.length){
+        const escolha = await showConfirm(
+          "Já existem imóveis cadastrados neste navegador. O que você quer fazer com os dados do arquivo importado?",
+          {
+            title: "Importar dados",
+            buttons: [
+              {label:"Cancelar", value:"cancelar"},
+              {label:"Substituir tudo", value:"substituir"},
+              {label:"Mesclar", value:"mesclar", primary:true},
+            ]
+          }
+        );
+        if(escolha === "cancelar"){ importFile.value=""; return; }
+        modoSubstituir = (escolha === "substituir");
+      }
+
+      if(modoSubstituir || imoveis.length===0){
+        imoveis = importados;
+      } else {
+        const existentes = new Set(imoveis.map(x=>x.id));
+        importados.forEach(im=>{
+          if(existentes.has(im.id)){
+            const idx = imoveis.findIndex(x=>x.id===im.id);
+            imoveis[idx] = im;
+          } else {
+            imoveis.push(im);
+          }
+        });
+      }
+      saveData();
+      renderAll();
+      showToast(`Importação concluída: ${importados.length} imóvel(is) processado(s).`, "ok");
+    }catch(err){
+      console.error("Erro ao importar", err);
+      showToast("Não foi possível ler esse arquivo. Verifique se é um arquivo exportado por este painel.", "err");
+    }finally{
+      importFile.value = "";
+    }
+  };
+  reader.readAsText(file);
+});
+
+// ---- Alerta ao abrir o painel ----
+function playAlertBeep(){
+  try{
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const playTone = (freq, start, dur)=>{
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = "sine";
+      osc.frequency.value = freq;
+      gain.gain.value = 0.001;
+      osc.connect(gain); gain.connect(ctx.destination);
+      const t0 = ctx.currentTime + start;
+      gain.gain.exponentialRampToValueAtTime(0.12, t0 + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+      osc.start(t0); osc.stop(t0 + dur + 0.02);
+    };
+    playTone(880, 0, 0.16);
+    playTone(880, 0.22, 0.16);
+  }catch(e){ /* áudio indisponível; ignora silenciosamente */ }
+}
+
+function checkAlertsOnOpen(){
+  const thresholdDays = parseInt(document.getElementById("alertDays").value,10) || 7;
+  let atrasados = 0, urgentesOuAtencao = 0;
+  imoveis.forEach(im=>{
+    const a = getAlertLevel(im, thresholdDays);
+    if(a.level === "atrasado") atrasados++;
+    else if(a.level === "urgente" || a.level === "atencao") urgentesOuAtencao++;
+  });
+  const banner = document.getElementById("alertBanner");
+  const text = document.getElementById("alertBannerText");
+  if(atrasados > 0){
+    banner.className = "alert-banner red show";
+    text.textContent = `⚠️ ${atrasados} imóvel(is) com leitura atrasada${urgentesOuAtencao? ` e mais ${urgentesOuAtencao} próximo(s) do vencimento` : ""}.`;
+    playAlertBeep();
+  } else if(urgentesOuAtencao > 0){
+    banner.className = "alert-banner orange show";
+    text.textContent = `🔔 ${urgentesOuAtencao} imóvel(is) com leitura se aproximando.`;
+    playAlertBeep();
+  }
+}
+document.getElementById("alertBannerClose").addEventListener("click", ()=>{
+  document.getElementById("alertBanner").classList.remove("show");
+});
+
+// ---- Inicialização ----
+async function init(){
+  loadData();
+  renderAll();
+  checkAlertsOnOpen();
+  const btnExportar = document.getElementById("btnExportar");
+  btnExportar.disabled = true;
+  try{
+    downloadsCap = (window.claude && typeof window.claude.use === "function")
+      ? await window.claude.use("downloads") : null;
+  }catch(e){ downloadsCap = null; }
+  btnExportar.disabled = false;
+}
+
+init();
+</script>
+</body>
+</html>
