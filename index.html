@@ -155,6 +155,7 @@ input[type=text],input[type=number],input[type=date],select{
       <p class="sub">Cadastro de imóveis, código do cliente/CPF-CNPJ e alertas de leitura</p>
     </div>
     <div class="header-actions">
+      <button class="btn btn-ghost" id="themeToggle" title="Alternar tema claro/escuro">🌙</button>
       <button class="btn btn-ghost" id="btnExportar">⭳ Exportar</button>
       <button class="btn btn-ghost" id="btnImportar">⭱ Importar</button>
       <input type="file" id="importFile" accept=".json,.txt,application/json,text/plain">
@@ -298,6 +299,37 @@ function saveData(){
 }
 
 function uid(){ return Date.now().toString(36) + Math.random().toString(36).slice(2,7); }
+
+// ---- Tema claro/escuro (alternância manual) ----
+const THEME_KEY = "energia_theme_v1";
+function isEffectivelyDark(){
+  const current = document.documentElement.getAttribute("data-theme");
+  if(current === "dark") return true;
+  if(current === "light") return false;
+  return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+}
+function updateThemeIcon(){
+  const btn = document.getElementById("themeToggle");
+  if(btn) btn.textContent = isEffectivelyDark() ? "☀️" : "🌙";
+}
+function applyTheme(theme){
+  if(theme === "light" || theme === "dark"){
+    document.documentElement.setAttribute("data-theme", theme);
+  } else {
+    document.documentElement.removeAttribute("data-theme");
+  }
+  updateThemeIcon();
+}
+document.getElementById("themeToggle").addEventListener("click", ()=>{
+  const next = isEffectivelyDark() ? "light" : "dark";
+  try{ localStorage.setItem(THEME_KEY, next); }catch(e){}
+  applyTheme(next);
+});
+try{
+  applyTheme(localStorage.getItem(THEME_KEY));
+}catch(e){
+  applyTheme(null);
+}
 
 function showToast(msg, type){
   const wrap = document.getElementById("toastWrap");
