@@ -131,6 +131,10 @@ input[type=text],input[type=number],input[type=date],select{
 .close-x{position:absolute;top:14px;right:16px;background:none;border:none;font-size:20px;color:var(--muted);cursor:pointer;}
 .threshold-box{display:flex;gap:8px;align-items:center;font-size:13px;color:var(--muted);margin-bottom:16px;flex-wrap:wrap;}
 .threshold-box input{width:60px;}
+.report-section{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;margin-bottom:20px;box-shadow:var(--shadow);}
+.report-section h3{margin:0 0 12px;font-size:15px;}
+.report-note{font-size:12px;color:var(--muted);margin-top:8px;}
+#importCSVFile{position:absolute;width:1px;height:1px;opacity:0;overflow:hidden;z-index:-1;}
 #importFile{position:absolute;width:1px;height:1px;opacity:0;overflow:hidden;z-index:-1;}
 .toast-wrap{
   position:fixed;bottom:20px;left:50%;transform:translateX(-50%);
@@ -160,10 +164,16 @@ input[type=text],input[type=number],input[type=date],select{
     </div>
     </div>
     <div class="header-actions">
+      <a class="btn btn-ghost" href="./index.html" title="Voltar à página inicial" style="text-decoration:none;display:inline-flex;align-items:center;">🏠 Início</a>
+      <a class="btn btn-ghost" href="./agua.html" title="Abrir painel de 💧 Água" style="text-decoration:none;display:inline-flex;align-items:center;">💧 Água</a>
       <button class="btn btn-ghost" id="themeToggle" title="Alternar tema claro/escuro">🌙</button>
+      <button class="btn btn-ghost" id="btnRelatorio">📊 Relatório</button>
       <button class="btn btn-ghost" id="btnExportar">⭳ Exportar</button>
       <button class="btn btn-ghost" id="btnImportar">⭱ Importar</button>
       <input type="file" id="importFile" accept=".json,.txt,application/json,text/plain">
+      <button class="btn btn-ghost" id="btnImportarCSV">📥 Lote (CSV)</button>
+      <input type="file" id="importCSVFile" accept=".csv,text/csv">
+      <button class="btn btn-ghost" id="btnModeloCSV">📄 Modelo CSV</button>
       <button class="btn btn-primary" id="btnNovoImovel">+ Novo imóvel</button>
     </div>
   </header>
@@ -175,6 +185,12 @@ input[type=text],input[type=number],input[type=date],select{
   </div>
 
   <div class="stats" id="stats"></div>
+
+  <div class="report-section" id="reportSection" style="display:none;">
+    <h3>Relatório de gastos (últimos 12 meses)</h3>
+    <div id="reportChart"></div>
+    <p class="report-note">Considera apenas imóveis ativos (não arquivados).</p>
+  </div>
 
   <div class="threshold-box">
     <span>Alertar quando faltarem</span>
@@ -190,6 +206,16 @@ input[type=text],input[type=number],input[type=date],select{
       <option value="urgente">Urgente (vermelho)</option>
       <option value="atencao">Atenção (laranja)</option>
       <option value="ok">Ok (verde)</option>
+    </select>
+    <select id="sortBy">
+      <option value="proxima">Ordenar: próxima leitura</option>
+      <option value="nome">Ordenar: nome</option>
+      <option value="valor">Ordenar: última fatura (maior valor)</option>
+    </select>
+    <select id="filterArquivado">
+      <option value="ativos">Somente ativos</option>
+      <option value="arquivados">Somente arquivados</option>
+      <option value="todos">Todos</option>
     </select>
   </div>
 
@@ -227,6 +253,10 @@ input[type=text],input[type=number],input[type=date],select{
     <div class="field">
       <label>Dia habitual de leitura (1–31)</label>
       <input type="number" id="imovelDiaLeitura" min="1" max="31" placeholder="Ex: 15">
+    </div>
+    <div class="field">
+      <label>Alerta personalizado (dias) — opcional</label>
+      <input type="number" id="imovelAlertaDias" min="1" max="60" placeholder="Deixe em branco para usar o padrão geral">
     </div>
     <div class="modal-actions">
       <button class="btn btn-ghost" data-close>Cancelar</button>
@@ -269,6 +299,11 @@ input[type=text],input[type=number],input[type=date],select{
         <option value="baixada">Baixada</option>
         <option value="pago">Pago</option>
       </select>
+    </div>
+    <div class="field">
+      <label>Anexo da fatura (PDF ou imagem) — opcional</label>
+      <input type="file" id="faturaAnexoInput" accept="application/pdf,image/*">
+      <div id="faturaAnexoInfo" style="font-size:12px;color:var(--muted);margin-top:4px;"></div>
     </div>
     <div class="modal-actions">
       <button class="btn btn-ghost" data-close>Cancelar</button>
@@ -414,7 +449,9 @@ function getNextReadingDate(imovel){
   return null;
 }
 
-function getAlertLevel(imovel, thresholdDays){
+function getAlertLevel(imovel, globalThresholdDays){
+  const thresholdDays = (imovel.alertaDias && !isNaN(parseInt(imovel.alertaDias,10)))
+    ? parseInt(imovel.alertaDias,10) : globalThresholdDays;
   const next = getNextReadingDate(imovel);
   if(!next) return {level:"none", days:null};
   const today = new Date(); today.setHours(0,0,0,0);
@@ -448,12 +485,116 @@ function escapeHtml(str){
   return String(str).replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 }
 
+function formatCpfCnpj(value){
+  const digits = (value||"").replace(/\D/g,"").slice(0,14);
+  if(digits.length <= 11){
+    return digits
+      .replace(/(\d{3})(\d)/,"$1.$2")
+      .replace(/(\d{3})(\d)/,"$1.$2")
+      .replace(/(\d{3})(\d{1,2})$/,"$1-$2");
+  }
+  return digits
+    .replace(/(\d{2})(\d)/,"$1.$2")
+    .replace(/(\d{3})(\d)/,"$1.$2")
+    .replace(/(\d{3})(\d)/,"$1/$2")
+    .replace(/(\d{4})(\d{1,2})$/,"$1-$2");
+}
+
+function encontrarDuplicado(data, idAtual){
+  const checks = [
+    {key:"codigoCliente", label:"código do cliente"},
+    {key:"documento", label:"CPF/CNPJ"},
+    {key:"numeroUC", label:"número de identificação (UC/matrícula)"},
+  ];
+  for(const c of checks){
+    const val = (data[c.key]||"").trim().toLowerCase();
+    if(!val) continue;
+    const achou = imoveis.find(im => im.id !== idAtual && (im[c.key]||"").trim().toLowerCase() === val);
+    if(achou) return { nome: achou.nome, campo: c.label };
+  }
+  return null;
+}
+
+// ---- Relatório ----
+function buildBarChartSVG(labels, values){
+  const width = 640, height = 220, padding = {left:44, right:10, top:10, bottom:26};
+  const max = Math.max(1, ...values);
+  const chartW = width - padding.left - padding.right;
+  const chartH = height - padding.top - padding.bottom;
+  const gap = 6;
+  const barW = (chartW / values.length) - gap;
+  let bars = "", grid = "";
+  [0, 0.5, 1].forEach(f=>{
+    const y = padding.top + chartH * (1 - f);
+    grid += `<line x1="${padding.left}" y1="${y.toFixed(1)}" x2="${width-padding.right}" y2="${y.toFixed(1)}" stroke="var(--border)" stroke-width="1"></line>`;
+    grid += `<text x="2" y="${(y+3).toFixed(1)}" font-size="9" fill="var(--muted)">R$ ${(max*f).toFixed(0)}</text>`;
+  });
+  values.forEach((v,i)=>{
+    const barH = max ? (v/max)*chartH : 0;
+    const x = padding.left + i*(barW+gap);
+    const y = padding.top + (chartH - barH);
+    bars += `<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${Math.max(barW,1).toFixed(1)}" height="${barH.toFixed(1)}" rx="3" fill="var(--accent)"></rect>`;
+    bars += `<text x="${(x+barW/2).toFixed(1)}" y="${height-8}" font-size="9" text-anchor="middle" fill="var(--muted)">${labels[i]}</text>`;
+  });
+  return `<svg viewBox="0 0 ${width} ${height}" style="width:100%;height:auto;">${grid}${bars}</svg>`;
+}
+
+function renderReport(){
+  const box = document.getElementById("reportChart");
+  if(!box) return;
+  const months = [];
+  const now = new Date();
+  for(let i=11;i>=0;i--){
+    const d = new Date(now.getFullYear(), now.getMonth()-i, 1);
+    months.push(d.toISOString().slice(0,7));
+  }
+  const nomesMes = ["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"];
+  const totals = months.map(m=>{
+    let soma = 0;
+    imoveis.filter(im=>!im.arquivado).forEach(im=>{
+      (im.faturas||[]).forEach(f=>{
+        if(f.dataLeitura && f.dataLeitura.slice(0,7)===m) soma += parseFloat(f.valor)||0;
+      });
+    });
+    return soma;
+  });
+  const labels = months.map(m=> nomesMes[parseInt(m.split("-")[1],10)-1]);
+  box.innerHTML = buildBarChartSVG(labels, totals);
+}
+
+// ---- Importação em lote (CSV) ----
+function normalizarCabecalho(h){
+  return (h||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9]/g,"");
+}
+const MAPA_CSV = {
+  nome:"nome",
+  endereco:"endereco",
+  codigo:"codigoCliente", codigocliente:"codigoCliente",
+  documento:"documento", cpf:"documento", cnpj:"documento", cpfcnpj:"documento",
+  uc:"numeroUC", numerouc:"numeroUC", matricula:"numeroUC", numeromatricula:"numeroUC",
+  dialeitura:"diaLeitura", dia:"diaLeitura",
+};
+function parseCSV(text){
+  const lines = text.split(/\r?\n/).filter(l=>l.trim().length>0);
+  if(lines.length < 2) return [];
+  const headers = lines[0].split(",").map(normalizarCabecalho);
+  return lines.slice(1).map(line=>{
+    const cols = line.split(",");
+    const obj = {};
+    headers.forEach((h,i)=>{
+      const campo = MAPA_CSV[h];
+      if(campo) obj[campo] = (cols[i]||"").trim();
+    });
+    return obj;
+  });
+}
+
 function renderStats(){
   const thresholdDays = parseInt(document.getElementById("alertDays").value,10) || 7;
   let atrasados=0, urgentes=0, atencao=0, ok=0;
   let gastoMes=0;
   const mesAtual = new Date().toISOString().slice(0,7);
-  imoveis.forEach(im=>{
+  imoveis.filter(im=>!im.arquivado).forEach(im=>{
     const a = getAlertLevel(im, thresholdDays);
     if(a.level==="atrasado") atrasados++;
     else if(a.level==="urgente") urgentes++;
@@ -467,7 +608,7 @@ function renderStats(){
   });
   const alertasAtivos = atrasados+urgentes+atencao;
   document.getElementById("stats").innerHTML = `
-    <div class="stat"><div class="label">Imóveis cadastrados</div><div class="value">${imoveis.length}</div></div>
+    <div class="stat"><div class="label">Imóveis ativos</div><div class="value">${imoveis.filter(im=>!im.arquivado).length}</div></div>
     <div class="stat"><div class="label">Alertas ativos</div><div class="value ${alertasAtivos>0?'red':''}">${alertasAtivos}</div></div>
     <div class="stat"><div class="label">Leituras atrasadas</div><div class="value ${atrasados>0?'red':''}">${atrasados}</div></div>
     <div class="stat"><div class="label">Gasto no mês atual</div><div class="value">R$ ${gastoMes.toFixed(2).replace('.',',')}</div></div>
@@ -479,7 +620,12 @@ function renderGrid(){
   const filterStatus = document.getElementById("filterStatus").value;
   const thresholdDays = parseInt(document.getElementById("alertDays").value,10) || 7;
 
+  const filterArquivado = document.getElementById("filterArquivado").value;
+  const sortBy = document.getElementById("sortBy").value;
+
   let list = imoveis.filter(im=>{
+    if(filterArquivado === "ativos" && im.arquivado) return false;
+    if(filterArquivado === "arquivados" && !im.arquivado) return false;
     const matchSearch = !search ||
       (im.nome||"").toLowerCase().includes(search) ||
       (im.codigoCliente||"").toLowerCase().includes(search) ||
@@ -489,6 +635,20 @@ function renderGrid(){
     if(filterStatus==="todos") return true;
     const a = getAlertLevel(im, thresholdDays);
     return a.level === filterStatus;
+  });
+
+  list.sort((a,b)=>{
+    if(sortBy === "nome") return (a.nome||"").localeCompare(b.nome||"");
+    if(sortBy === "valor"){
+      const va = parseFloat((getLastFatura(a)||{}).valor)||0;
+      const vb = parseFloat((getLastFatura(b)||{}).valor)||0;
+      return vb - va;
+    }
+    const da = getNextReadingDate(a), db = getNextReadingDate(b);
+    if(!da && !db) return 0;
+    if(!da) return 1;
+    if(!db) return -1;
+    return da - db;
   });
 
   const grid = document.getElementById("grid");
@@ -517,7 +677,10 @@ function renderGrid(){
           <td>${f.consumo ?? '—'} kWh</td>
           <td>${fmtDate(f.vencimento)}</td>
           <td class="pill-${f.status||'pendente'}">${statusLabel(f.status)}</td>
-          <td><button class="btn-edit-fatura" data-edit-fatura="${im.id}|${f.id}" title="Editar fatura">✎</button></td>
+          <td>
+            ${f.anexo ? `<a href="${f.anexo.dados}" download="${escapeHtml(f.anexo.nome||'anexo')}" class="btn-edit-fatura" title="Baixar anexo">📎</a>` : ""}
+            <button class="btn-edit-fatura" data-edit-fatura="${im.id}|${f.id}" title="Editar fatura">✎</button>
+          </td>
         </tr>`).join("") || `<tr><td colspan="6" style="color:var(--muted);">Nenhuma fatura lançada</td></tr>`;
 
     return `
@@ -527,7 +690,7 @@ function renderGrid(){
           <h3>${escapeHtml(im.nome||"(sem nome)")}</h3>
           <div class="addr">${escapeHtml(im.endereco||"")}</div>
         </div>
-        ${badgeFor(alert)}
+        ${im.arquivado ? '<span class="badge" style="background:var(--border);color:var(--muted);">Arquivado</span>' : badgeFor(alert)}
       </div>
       <div class="meta-row">
         <span><b>Código:</b> ${escapeHtml(im.codigoCliente||"—")}</span>
@@ -542,6 +705,7 @@ function renderGrid(){
         <button class="btn btn-primary btn-sm" data-fatura="${im.id}">+ Lançar fatura</button>
         <button class="btn btn-ghost btn-sm" data-toggle="${im.id}">${isOpen? "Ocultar histórico":"Ver histórico"}</button>
         <button class="btn btn-ghost btn-sm" data-edit="${im.id}">Editar</button>
+        <button class="btn btn-ghost btn-sm" data-archive="${im.id}">${im.arquivado? "Reativar":"Arquivar"}</button>
         <button class="btn btn-ghost btn-sm" data-del="${im.id}">Excluir</button>
       </div>
       <div class="history ${isOpen?'open':''}">
@@ -559,6 +723,8 @@ function renderGrid(){
 function renderAll(){
   renderStats();
   renderGrid();
+  const sec = document.getElementById("reportSection");
+  if(sec && sec.style.display !== "none") renderReport();
 }
 
 // Modal imóvel
@@ -572,10 +738,15 @@ document.getElementById("btnNovoImovel").addEventListener("click", ()=>{
   document.getElementById("imovelDocumento").value = "";
   document.getElementById("imovelUC").value = "";
   document.getElementById("imovelDiaLeitura").value = "";
+  document.getElementById("imovelAlertaDias").value = "";
   overlayImovel.classList.add("open");
 });
 
-document.getElementById("salvarImovel").addEventListener("click", ()=>{
+document.getElementById("imovelDocumento").addEventListener("input", (e)=>{
+  e.target.value = formatCpfCnpj(e.target.value);
+});
+
+document.getElementById("salvarImovel").addEventListener("click", async ()=>{
   const id = document.getElementById("imovelId").value;
   const nome = document.getElementById("imovelNome").value.trim();
   if(!nome){ showToast("Informe o nome do imóvel.", "err"); return; }
@@ -586,20 +757,49 @@ document.getElementById("salvarImovel").addEventListener("click", ()=>{
     documento: document.getElementById("imovelDocumento").value.trim(),
     numeroUC: document.getElementById("imovelUC").value.trim(),
     diaLeitura: document.getElementById("imovelDiaLeitura").value.trim(),
+    alertaDias: document.getElementById("imovelAlertaDias").value.trim(),
   };
+  const dup = encontrarDuplicado(data, id);
+  if(dup){
+    const prosseguir = await showConfirm(
+      `Já existe um imóvel (${dup.nome}) com o mesmo ${dup.campo} cadastrado. Deseja salvar mesmo assim?`,
+      { title:"Possível duplicidade", buttons:[
+        {label:"Cancelar", value:false},
+        {label:"Salvar mesmo assim", value:true, primary:true}
+      ]}
+    );
+    if(!prosseguir) return;
+  }
   if(id){
     const im = imoveis.find(x=>x.id===id);
     if(im) Object.assign(im, data);
   } else {
-    imoveis.push({ id: uid(), ...data, faturas: [] });
+    imoveis.push({ id: uid(), ...data, faturas: [], arquivado: false });
   }
   saveData();
   overlayImovel.classList.remove("open");
   renderAll();
+  showToast("Imóvel salvo.", "ok");
 });
 
 // Modal fatura
 const overlayFatura = document.getElementById("overlayFatura");
+let faturaAnexoAtual = null;
+document.getElementById("faturaAnexoInput").addEventListener("change", (e)=>{
+  const file = e.target.files[0];
+  if(!file) return;
+  if(file.size > 1.5*1024*1024){
+    showToast("Arquivo grande (>1.5MB) — pode não caber no armazenamento do navegador.", "err");
+  }
+  const reader = new FileReader();
+  reader.onload = ()=>{
+    faturaAnexoAtual = { nome: file.name, tipo: file.type, dados: reader.result };
+    document.getElementById("faturaAnexoInfo").textContent = `Selecionado: ${file.name}`;
+  };
+  reader.onerror = ()=> showToast("Não foi possível ler o arquivo selecionado.", "err");
+  reader.readAsDataURL(file);
+});
+
 document.getElementById("salvarFatura").addEventListener("click", ()=>{
   const imovelId = document.getElementById("faturaImovelId").value;
   const faturaId = document.getElementById("faturaId").value;
@@ -614,6 +814,7 @@ document.getElementById("salvarFatura").addEventListener("click", ()=>{
     valor: document.getElementById("faturaValor").value,
     consumo: document.getElementById("faturaConsumo").value,
     status: document.getElementById("faturaStatus").value,
+    anexo: faturaAnexoAtual,
   };
   if(faturaId){
     const idx = im.faturas.findIndex(f=>f.id===faturaId);
@@ -621,7 +822,13 @@ document.getElementById("salvarFatura").addEventListener("click", ()=>{
   } else {
     im.faturas.push({ id: uid(), ...dadosFatura });
   }
-  saveData();
+  try{
+    saveData();
+  }catch(e){
+    console.error(e);
+    showToast("Não foi possível salvar — o navegador pode estar sem espaço (anexos grandes ocupam muito espaço).", "err");
+    return;
+  }
   overlayFatura.classList.remove("open");
   renderAll();
 });
@@ -638,6 +845,9 @@ document.getElementById("grid").addEventListener("click", (e)=>{
     document.getElementById("faturaValor").value = "";
     document.getElementById("faturaConsumo").value = "";
     document.getElementById("faturaStatus").value = "pendente";
+    faturaAnexoAtual = null;
+    document.getElementById("faturaAnexoInput").value = "";
+    document.getElementById("faturaAnexoInfo").textContent = "";
     overlayFatura.classList.add("open");
   }
   if(t.dataset.editFatura){
@@ -653,6 +863,9 @@ document.getElementById("grid").addEventListener("click", (e)=>{
     document.getElementById("faturaValor").value = f.valor||"";
     document.getElementById("faturaConsumo").value = f.consumo||"";
     document.getElementById("faturaStatus").value = f.status||"pendente";
+    faturaAnexoAtual = f.anexo || null;
+    document.getElementById("faturaAnexoInput").value = "";
+    document.getElementById("faturaAnexoInfo").textContent = f.anexo ? `Anexo atual: ${f.anexo.nome} (escolha outro arquivo para substituir)` : "";
     overlayFatura.classList.add("open");
   }
   if(t.dataset.toggle){
@@ -671,7 +884,17 @@ document.getElementById("grid").addEventListener("click", (e)=>{
     document.getElementById("imovelDocumento").value = im.documento||"";
     document.getElementById("imovelUC").value = im.numeroUC||"";
     document.getElementById("imovelDiaLeitura").value = im.diaLeitura||"";
+    document.getElementById("imovelAlertaDias").value = im.alertaDias||"";
     overlayImovel.classList.add("open");
+  }
+  if(t.dataset.archive){
+    const im = imoveis.find(x=>x.id===t.dataset.archive);
+    if(im){
+      im.arquivado = !im.arquivado;
+      saveData();
+      renderAll();
+      showToast(im.arquivado ? "Imóvel arquivado." : "Imóvel reativado.", "ok");
+    }
   }
   if(t.dataset.del){
     showConfirm("Excluir este imóvel e todo o histórico de faturas?", {
@@ -700,6 +923,8 @@ document.querySelectorAll("[data-close]").forEach(btn=>{
 
 document.getElementById("search").addEventListener("input", renderGrid);
 document.getElementById("filterStatus").addEventListener("change", renderGrid);
+document.getElementById("sortBy").addEventListener("change", renderGrid);
+document.getElementById("filterArquivado").addEventListener("change", renderGrid);
 document.getElementById("alertDays").addEventListener("input", renderAll);
 
 // ---- Exportar ----
@@ -831,6 +1056,79 @@ function checkAlertsOnOpen(){
 }
 document.getElementById("alertBannerClose").addEventListener("click", ()=>{
   document.getElementById("alertBanner").classList.remove("show");
+});
+
+// ---- Relatório: toggle ----
+document.getElementById("btnRelatorio").addEventListener("click", ()=>{
+  const sec = document.getElementById("reportSection");
+  const isHidden = sec.style.display === "none";
+  sec.style.display = isHidden ? "block" : "none";
+  document.getElementById("btnRelatorio").textContent = isHidden ? "📊 Ocultar relatório" : "📊 Relatório";
+  if(isHidden) renderReport();
+});
+
+// ---- Modelo CSV ----
+document.getElementById("btnModeloCSV").addEventListener("click", async ()=>{
+  const modelo = "nome,endereco,codigo_cliente,cpf_cnpj,uc,dia_leitura\nExemplo Imóvel,Rua Exemplo 123,123456,000.000.000-00,987654321,15\n";
+  const filename = "modelo-cadastro-lote.csv";
+  if(downloadsCap){
+    try{ await downloadsCap.save({ filename, data: modelo }); showToast("Modelo baixado.", "ok"); }
+    catch(e){ console.error(e); showToast("Não foi possível baixar o modelo.", "err"); }
+    return;
+  }
+  try{
+    const blob = new Blob([modelo], {type:"text/csv;charset=utf-8"});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url; a.download = filename;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    showToast("Modelo baixado.", "ok");
+  }catch(e){
+    console.error(e);
+    showToast("Não foi possível baixar o modelo.", "err");
+  }
+});
+
+// ---- Importar em lote (CSV) ----
+const importCSVFile = document.getElementById("importCSVFile");
+document.getElementById("btnImportarCSV").addEventListener("click", ()=> importCSVFile.click());
+importCSVFile.addEventListener("change", (e)=>{
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = ()=>{
+    try{
+      const linhas = parseCSV(reader.result);
+      let adicionados = 0, ignorados = 0, invalidos = 0;
+      linhas.forEach(row=>{
+        if(!row.nome || !row.nome.trim()){ invalidos++; return; }
+        const dup = encontrarDuplicado(row, null);
+        if(dup){ ignorados++; return; }
+        imoveis.push({
+          id: uid(),
+          nome: row.nome.trim(),
+          endereco: row.endereco||"",
+          codigoCliente: row.codigoCliente||"",
+          documento: row.documento||"",
+          numeroUC: row.numeroUC||"",
+          diaLeitura: row.diaLeitura||"",
+          faturas: [],
+          arquivado: false,
+        });
+        adicionados++;
+      });
+      saveData();
+      renderAll();
+      showToast(`Lote importado: ${adicionados} adicionado(s), ${ignorados} ignorado(s) (duplicado), ${invalidos} inválido(s).`, "ok");
+    }catch(err){
+      console.error("Erro ao importar CSV", err);
+      showToast("Não foi possível ler esse CSV. Confira se segue o modelo.", "err");
+    }finally{
+      importCSVFile.value = "";
+    }
+  };
+  reader.readAsText(file);
 });
 
 // ---- Inicialização ----
