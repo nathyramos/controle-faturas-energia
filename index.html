@@ -216,6 +216,118 @@ body.is-menu #bgPhoto{background-image:var(--bg-overlay-menu), url("data:image/j
 }
 .menu-theme{font-size:16px;}
 a.btn{text-decoration:none;display:inline-flex;align-items:center;}
+/* ---- Painel de Material de Limpeza (#limpeza) ---- */
+#limpezaScreen{--lz-accent:#4ade80;--lz-on-accent:#0d1a12;--lz-blue:#5b8def;--lz-blue-soft:#1c2a42;--lz-field:rgba(255,255,255,.04);}
+:root[data-theme="light"] #limpezaScreen{--lz-accent:#15803d;--lz-on-accent:#fff;--lz-blue:#2563eb;--lz-blue-soft:#eaf1ff;--lz-field:rgba(0,0,0,.03);}
+#limpezaScreen .lz-tabs{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;border-bottom:1px solid var(--border);margin:4px 0 0}
+#limpezaScreen .lz-tabs::-webkit-scrollbar{display:none}
+#limpezaScreen .lz-tab{background:none;border:0;border-bottom:3px solid transparent;padding:9px 12px;cursor:pointer;color:var(--muted);font:inherit;font-weight:700;white-space:nowrap;display:flex;align-items:center;gap:6px}
+#limpezaScreen .lz-tab[aria-selected="true"]{color:var(--text);border-bottom-color:var(--lz-accent)}
+#limpezaScreen .lz-count{background:var(--text);color:var(--bg);border-radius:999px;font-size:11px;padding:0 7px;line-height:1.7;font-weight:800}
+#limpezaScreen .lz-count:empty{display:none}
+#limpezaScreen .lz-count.red{background:var(--red);color:#fff}
+#limpezaScreen section.lz-view{display:none;padding-top:20px}
+#limpezaScreen section.lz-view.on{display:block}
+#limpezaScreen h2{font-size:17px;font-weight:800;margin:0 0 4px}
+#limpezaScreen h3{margin:0;font-size:15px;font-weight:800}
+#limpezaScreen .lead{color:var(--muted);margin:0 0 16px;max-width:64ch;font-size:13.5px}
+#limpezaScreen .panel{background:var(--glass);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border:1px solid var(--border);border-radius:16px;padding:18px;box-shadow:var(--shadow)}
+#limpezaScreen .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:640px){#limpezaScreen .grid2{grid-template-columns:1fr}}
+#limpezaScreen label.f{display:flex;flex-direction:column;gap:4px;font-size:12.5px;font-weight:600;color:var(--muted)}
+#limpezaScreen label.f .opt{font-weight:500}
+#limpezaScreen input[type=text],#limpezaScreen input[type=search],#limpezaScreen input[type=month],#limpezaScreen input[type=number],#limpezaScreen select,#limpezaScreen textarea{background:var(--glass);border:1px solid var(--border);border-radius:10px;padding:9px 11px;width:100%;min-width:0;color:var(--text);font:inherit;font-size:14px}
+#limpezaScreen textarea{resize:vertical;min-height:64px}
+#limpezaScreen .mat-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:8px;margin:14px 0}
+#limpezaScreen .mat{display:flex;align-items:center;justify-content:space-between;gap:10px;border:1px solid var(--border);border-radius:12px;padding:8px 8px 8px 12px;background:var(--lz-field)}
+#limpezaScreen .mat.sel{border-color:var(--lz-accent);box-shadow:inset 4px 0 0 var(--lz-accent)}
+#limpezaScreen .mat.over{border-color:var(--red);box-shadow:inset 4px 0 0 var(--red)}
+#limpezaScreen .mat .nm{font-weight:700;line-height:1.25}
+#limpezaScreen .mat .un,#limpezaScreen .disp{font-size:12px;color:var(--muted)}
+#limpezaScreen .mat.over .disp{color:var(--red);font-weight:800}
+#limpezaScreen .step{display:flex;align-items:center;gap:4px;flex-shrink:0}
+#limpezaScreen .step button{width:34px;height:34px;border-radius:9px;border:1px solid var(--border);background:var(--glass);cursor:pointer;font-size:18px;font-weight:800;line-height:1;color:var(--text)}
+#limpezaScreen .step output{min-width:28px;text-align:center;font-weight:800;font-variant-numeric:tabular-nums}
+#limpezaScreen .lz-btn{border:1px solid var(--border);background:var(--glass);color:var(--text);border-radius:10px;padding:9px 16px;font:inherit;font-weight:700;font-size:13.5px;cursor:pointer}
+#limpezaScreen .lz-btn.primary{background:var(--lz-accent);border-color:var(--lz-accent);color:var(--lz-on-accent)}
+#limpezaScreen .lz-btn.ok{background:var(--green);border-color:var(--green);color:#fff}
+#limpezaScreen .lz-btn.link{background:none;border-color:transparent;color:var(--muted);padding:6px 8px;text-decoration:underline;text-underline-offset:3px}
+#limpezaScreen .lz-btn:disabled{opacity:.5;cursor:not-allowed}
+#limpezaScreen .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+#limpezaScreen .row.end{justify-content:flex-end}
+#limpezaScreen .list{display:flex;flex-direction:column;gap:12px}
+#limpezaScreen .lz-card{background:var(--glass);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border:1px solid var(--border);border-radius:14px;padding:14px 16px;box-shadow:var(--shadow)}
+#limpezaScreen .card-h{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap}
+#limpezaScreen .card-h .nm{font-weight:800}
+#limpezaScreen .meta{font-size:12.5px;color:var(--muted)}
+#limpezaScreen .items{margin:10px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:4px}
+#limpezaScreen .items li{display:flex;justify-content:space-between;gap:10px;border-bottom:1px dashed var(--border);padding:3px 0}
+#limpezaScreen .items li:last-child{border-bottom:0}
+#limpezaScreen .items .q{font-weight:800;font-variant-numeric:tabular-nums;white-space:nowrap}
+#limpezaScreen .obs{margin:8px 0 0;font-size:13px;background:var(--lz-field);border-radius:8px;padding:6px 10px}
+#limpezaScreen .lz-badge{font-size:11.5px;font-weight:800;border-radius:999px;padding:2px 10px;white-space:nowrap}
+#limpezaScreen .b-lib{background:var(--lz-blue-soft);color:var(--lz-blue)}
+#limpezaScreen .b-ent{background:var(--green-soft);color:var(--green)}
+#limpezaScreen .b-red{background:var(--red-soft);color:var(--red)}
+#limpezaScreen .vale{background:var(--glass);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border:1px solid var(--border);border-radius:14px;display:grid;grid-template-columns:150px 1fr;overflow:hidden;box-shadow:var(--shadow)}
+@media (max-width:560px){#limpezaScreen .vale{grid-template-columns:1fr}}
+#limpezaScreen .vale .stub{background:var(--lz-accent);color:var(--lz-on-accent);padding:14px;display:flex;flex-direction:column;justify-content:space-between;gap:6px;border-right:2px dashed rgba(0,0,0,.3)}
+@media (max-width:560px){#limpezaScreen .vale .stub{border-right:0;border-bottom:2px dashed rgba(0,0,0,.3);flex-direction:row;align-items:center}}
+#limpezaScreen .vale .stub small{font-size:11.5px;font-weight:700;opacity:.85}
+#limpezaScreen .code{font-family:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;font-weight:500;letter-spacing:.06em}
+#limpezaScreen .vale .code{font-size:28px;line-height:1}
+#limpezaScreen .vale .body{padding:14px 16px}
+#limpezaScreen .lz-empty{text-align:center;color:var(--muted);padding:32px 16px;border:1px dashed var(--border);border-radius:14px}
+#limpezaScreen .banner{background:var(--orange-soft);color:var(--orange);border-radius:10px;padding:10px 14px;margin-bottom:16px;font-size:13.5px}
+#limpezaScreen .success{background:var(--green-soft);color:var(--green);border-radius:14px;padding:16px;margin-bottom:16px}
+#limpezaScreen .success .code{font-size:24px}
+#limpezaScreen .subhead{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin:26px 0 10px;flex-wrap:wrap}
+#limpezaScreen .filters{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:16px}
+@media (max-width:760px){#limpezaScreen .filters{grid-template-columns:1fr 1fr}}
+#limpezaScreen .scroll{overflow-x:auto}
+#limpezaScreen table{border-collapse:collapse;width:100%;font-size:13px}
+#limpezaScreen th,#limpezaScreen td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--border);vertical-align:top}
+#limpezaScreen th{font-weight:700;color:var(--muted);font-size:12px}
+#limpezaScreen td.n{text-align:right;font-variant-numeric:tabular-nums;font-weight:800}
+#limpezaScreen td.neg{color:var(--red)}
+#limpezaScreen tr.low td{background:var(--red-soft)}
+#limpezaScreen .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+#limpezaScreen .chip{display:inline-flex;align-items:center;gap:6px;background:var(--lz-field);border:1px solid var(--border);border-radius:999px;padding:4px 6px 4px 12px;font-size:13px}
+#limpezaScreen .chip button{border:0;background:none;cursor:pointer;color:var(--muted);font-size:18px;line-height:1;padding:0 4px}
+#limpezaScreen .minbox{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--muted)}
+#limpezaScreen .minbox input{width:76px;padding:4px 8px;text-align:right}
+#limpezaScreen .inline-form{margin-top:10px;display:flex;gap:8px;flex-wrap:wrap}
+#limpezaScreen .inline-form input{flex:1;min-width:180px}
+#limpezaScreen .b-warn{background:var(--orange-soft);color:var(--orange)}
+#limpezaScreen .lz-btn.link:hover{color:var(--text)}
+#limpezaScreen .success .lz-btn.link{padding:0 4px;font-weight:700}
+#limpezaScreen th.n{text-align:right}
+#limpezaScreen input.cad-num{width:90px;padding:5px 8px;text-align:right}
+#limpezaScreen select.cad-sel{width:auto;padding:5px 8px}
+#limpezaScreen #cad-mat td,#limpezaScreen #cad-dest td{vertical-align:middle}
+#limpezaScreen .stats{margin-bottom:6px}
+/* ---- Vale / comprovante impresso ---- */
+#lz-print{display:none}
+@media print{
+  @page{margin:14mm}
+  html,body{background:#fff !important}
+  body > *:not(#lz-print){display:none !important}
+  #lz-print{display:block !important;color:#000;background:#fff;font-family:"Manrope",Arial,sans-serif;font-size:12pt}
+  #lz-print .pv-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;border-bottom:2px solid #000;padding-bottom:10px;margin-bottom:14px}
+  #lz-print .pv-eyebrow{font-size:9pt;text-transform:uppercase;letter-spacing:.08em}
+  #lz-print h1{font-size:16pt;margin:2px 0 0}
+  #lz-print .pv-code{font-family:"JetBrains Mono",Consolas,monospace;font-size:24pt;font-weight:700;letter-spacing:.08em;border:2px dashed #000;padding:4px 12px}
+  #lz-print table{width:100%;border-collapse:collapse;margin-bottom:14px}
+  #lz-print th,#lz-print td{border:1px solid #000;padding:6px 8px;text-align:left;vertical-align:top}
+  #lz-print .pv-info th{width:18%;background:#eee;font-size:10pt}
+  #lz-print .pv-itens thead th{background:#eee}
+  #lz-print .n{text-align:right}
+  #lz-print .pv-obs{margin:0 0 14px}
+  #lz-print .pv-sign{display:flex;gap:40px;margin-top:48px}
+  #lz-print .pv-sign div{flex:1;text-align:center;font-size:10pt}
+  #lz-print .pv-sign span{display:block;border-top:1px solid #000;margin-bottom:4px}
+  #lz-print .pv-foot{margin-top:24px;font-size:9pt}
+}
 </style>
 </head>
 <body>
@@ -244,14 +356,140 @@ a.btn{text-decoration:none;display:inline-flex;align-items:center;}
         <p>Número de matrícula, código do cliente, CPF/CNPJ e alertas de leitura.</p>
         <span class="mc-link">Abrir painel →</span>
       </a>
-      <a class="menu-card limpeza" href="https://claude.ai/artifact/G8gTLQ6UYUoPE5ey7GiXsL" target="_blank" rel="noopener">
+      <a class="menu-card limpeza" href="#limpeza">
         <div class="mc-head"><span></span><span class="mc-chip">Estoque</span></div>
         <h2>Material de Limpeza</h2>
-        <p>Liberação de material para os alojamentos, retirada no almoxarifado e saldo em estoque.</p>
-        <span class="mc-link">Abrir painel ↗</span>
+        <p>Liberação de material para a obra e os alojamentos, estoque, consumo e lista de compra.</p>
+        <span class="mc-link">Abrir painel →</span>
       </a>
     </div>
   </div>
+</div>
+<div class="wrap" id="limpezaScreen" style="display:none;">
+  <header>
+    <div class="brand-row">
+      <div>
+      <h1>Material de Limpeza</h1>
+      <p class="sub">Liberação de material para a obra e os alojamentos, retirada no almoxarifado, estoque e consumo</p>
+    </div>
+    </div>
+    <div class="header-actions">
+      <a class="btn btn-ghost" href="#" title="Voltar ao menu">← Menu</a>
+    </div>
+  </header>
+  <p class="hint" id="who">Os dados são salvos online (no GitHub) e compartilhados com quem tem acesso. Alterações de outras pessoas aparecem automaticamente em até 30 segundos.</p>
+  <nav class="lz-tabs" role="tablist">
+    <button class="lz-tab" role="tab" data-v="liberar" data-adm>Nova liberação</button>
+    <button class="lz-tab" role="tab" data-v="almoxarifado">Almoxarifado <span class="lz-count" id="c-ret"></span></button>
+    <button class="lz-tab" role="tab" data-v="estoque">Estoque <span class="lz-count red" id="c-low"></span></button>
+    <button class="lz-tab" role="tab" data-v="consumo">Consumo</button>
+    <button class="lz-tab" role="tab" data-v="historico">Histórico</button>
+    <button class="lz-tab" role="tab" data-v="cadastros" data-adm>Cadastros</button>
+  </nav>
+  <div id="global-banner" style="margin-top:14px"></div>
+
+  <section class="lz-view" id="v-liberar">
+    <h2>Liberar material</h2>
+    <p class="lead">Lance o que foi pedido. A liberação vai direto para o almoxarifado com um código de retirada.</p>
+    <div id="lib-alerta"></div>
+    <div id="sent"></div>
+    <div class="panel" id="form-area"></div>
+  </section>
+
+  <section class="lz-view" id="v-almoxarifado">
+    <h2>Liberado para retirada</h2>
+    <p class="lead">Confira o código, entregue os itens e registre a entrega. A baixa no estoque acontece nesse momento. Imprima o vale se quiser a assinatura de quem retirou.</p>
+    <div id="ret-alerta"></div>
+    <input type="search" id="busca-ret" placeholder="Buscar por código, nome ou destino" style="margin-bottom:14px">
+    <div class="list" id="ret-list"></div>
+    <div class="subhead"><h3>Entregues hoje</h3></div>
+    <div class="list" id="hoje-list"></div>
+  </section>
+
+  <section class="lz-view" id="v-estoque">
+    <h2>Estoque</h2>
+    <p class="lead">O saldo sobe com as entradas e desce quando uma entrega é registrada. O que já foi liberado e ainda não retirado aparece como reservado.</p>
+    <div class="panel">
+      <h3 style="margin-bottom:10px">Registrar movimentação</h3>
+      <div class="grid2">
+        <label class="f">Material<select id="m-mat"></select></label>
+        <label class="f">Tipo<select id="m-tipo"><option value="entrada">Entrada de material</option><option value="contagem" id="m-opt-contagem">Contagem de inventário</option></select></label>
+        <label class="f"><span id="m-qlabel">Quantidade recebida</span><input type="number" min="0" id="m-qtd"></label>
+        <label class="f" id="m-preco-wrap"><span>Preço unitário (R$) <span class="opt">(opcional, da nota)</span></span><input type="number" min="0" step="0.01" id="m-preco" placeholder="0,00"></label>
+        <label class="f"><span>Observação <span class="opt">(opcional)</span></span><input type="text" id="m-obs" placeholder="Nota fiscal, fornecedor…"></label>
+      </div>
+      <p class="meta" id="m-hint" style="margin:10px 0 0"></p>
+      <div class="row end" style="margin-top:12px"><button class="lz-btn primary" id="m-salvar">Registrar entrada</button></div>
+    </div>
+    <div class="subhead"><h3>Saldo atual</h3><button class="lz-btn" id="btn-csv-est">Baixar estoque (CSV)</button></div>
+    <div class="panel scroll" id="est-tabela"></div>
+    <div class="subhead"><h3>Lista de compra</h3><div class="row"><button class="lz-btn" id="btn-copiar-compra">Copiar lista</button><button class="lz-btn" id="btn-csv-compra">Baixar (CSV)</button></div></div>
+    <div class="panel scroll" id="compra"></div>
+    <div class="subhead"><h3>Movimentações recentes</h3></div>
+    <div class="panel scroll" id="mov-tabela"></div>
+  </section>
+
+  <section class="lz-view" id="v-consumo">
+    <h2>Consumo</h2>
+    <p class="lead">Quanto cada destino consumiu no mês, quanto custou e quem passou da referência de consumo por pessoa.</p>
+    <div class="filters">
+      <label class="f">Mês<input type="month" id="c-mes"></label>
+      <label class="f">Tipo de destino<select id="c-tipo"><option value="">Todos</option><option value="alojamento">Alojamentos</option><option value="obra">Obra</option></select></label>
+    </div>
+    <div class="stats" id="c-stats"></div>
+    <div class="subhead"><h3>Por destino</h3><span class="meta">Somente o que já foi entregue</span></div>
+    <div class="panel scroll" id="c-dest"></div>
+    <div class="subhead"><h3>Por material</h3><button class="lz-btn" id="btn-csv-cons">Baixar (CSV)</button></div>
+    <div class="panel scroll" id="c-mat"></div>
+  </section>
+
+  <section class="lz-view" id="v-historico">
+    <h2>Histórico</h2>
+    <p class="lead">Todas as liberações, com quem liberou, quem retirou e o custo estimado.</p>
+    <div class="filters">
+      <label class="f">Mês<input type="month" id="h-mes"></label>
+      <label class="f">Destino<select id="h-dest"><option value="">Todos</option></select></label>
+      <label class="f">Situação<select id="h-status"><option value="">Todas</option><option value="liberada">Aguardando retirada</option><option value="entregue">Entregue</option></select></label>
+      <label class="f">Buscar<input type="search" id="h-busca" placeholder="Nome ou código"></label>
+    </div>
+    <div class="subhead" style="margin-top:6px"><h3>Liberações</h3><div class="row"><span class="meta" id="h-qtd"></span><button class="lz-btn" id="btn-csv">Baixar planilha (CSV)</button></div></div>
+    <div class="panel scroll" id="h-tabela"></div>
+  </section>
+
+  <section class="lz-view" id="v-cadastros">
+    <h2>Cadastros</h2>
+    <p class="lead">Materiais com seus limites, destinos atendidos e quem pode administrar o painel. As alterações são salvas assim que você sai do campo.</p>
+    <div class="panel">
+      <h3>Materiais</h3>
+      <p class="meta" style="margin:4px 0 10px"><strong>Mínimo</strong>: abaixo disso o item pede reposição. <strong>Ideal</strong>: quanto ter depois de comprar (usado na lista de compra). <strong>Ref. por pessoa/mês</strong>: consumo esperado por morador; vazio desliga o controle de cota daquele item.</p>
+      <div class="scroll" id="cad-mat"></div>
+      <div class="inline-form">
+        <input type="text" id="novo-mat" placeholder="Nome do material (ex.: Desinfetante)">
+        <input type="text" id="novo-un" placeholder="Unidade (ex.: litro)" style="flex:0 1 160px;min-width:120px">
+        <button class="lz-btn primary" id="add-mat">Adicionar material</button>
+      </div>
+    </div>
+    <div class="panel" style="margin-top:14px">
+      <h3>Destinos</h3>
+      <p class="meta" style="margin:4px 0 10px">Alojamentos e frentes da obra que recebem material. Nos alojamentos, informe quantas pessoas moram para o painel calcular a cota e o consumo por pessoa.</p>
+      <div class="scroll" id="cad-dest"></div>
+      <div class="inline-form">
+        <input type="text" id="novo-dest" placeholder="Nome (ex.: Alojamento 2, Canteiro, Refeitório)">
+        <select id="novo-dest-tipo" style="flex:0 1 160px;width:auto"><option value="alojamento">Alojamento</option><option value="obra">Obra</option></select>
+        <input type="number" min="0" id="novo-dest-mor" placeholder="Moradores" style="flex:0 1 120px;min-width:100px">
+        <button class="lz-btn primary" id="add-dest">Adicionar destino</button>
+      </div>
+    </div>
+    <div class="panel" style="margin-top:14px">
+      <h3>Administradores</h3>
+      <p class="meta" style="margin:4px 0 10px" id="adm-texto"></p>
+      <div class="chips" id="cad-adm"></div>
+      <div class="inline-form">
+        <input type="text" id="novo-adm" placeholder="Usuário do GitHub (ex.: alexsilva)">
+        <button class="lz-btn primary" id="add-adm">Adicionar administrador</button>
+      </div>
+    </div>
+  </section>
 </div>
 <div class="wrap" id="appScreen">
   <header>
@@ -621,6 +859,7 @@ function saveData(){
 
 // Busca alterações feitas pela outra pessoa (ao voltar para a aba e a cada 60s)
 async function refreshFromRemote(){
+  if(!TIPO) return;
   if(savesPending > 0 || document.hidden) return;
   try{
     const r = await ghLoad(DATA_PATH);
@@ -1156,6 +1395,7 @@ document.getElementById("alertBannerClose").addEventListener("click", ()=>{
 
 // ---- Inicialização ----
 async function init(){
+  if(location.hash.startsWith("#limpeza")) return; // painel de limpeza tem inicialização própria
   if(!TIPO){
     document.getElementById("appScreen").style.display = "none";
     document.getElementById("menuScreen").style.display = "block";
@@ -1182,6 +1422,629 @@ async function init(){
 
 
 init();
+</script>
+<script>
+/* ==== Painel de Material de Limpeza (#limpeza) ==== */
+(function(){
+const DATA_PATH = "limpeza.json";
+const DIAS_PARADA = 3;
+const MATERIAIS_PADRAO = [
+  ["Água sanitária","litro"],["Álcool 70%","litro"],["Desinfetante","litro"],["Detergente","frasco"],["Esponja","unidade"],
+  ["Limpador multiuso","frasco"],["Luva de limpeza","par"],["Pano de chão","unidade"],["Papel higiênico","pacote"],["Rodo","unidade"],
+  ["Sabão em pó","kg"],["Sabonete","unidade"],["Saco de lixo 100 L","pacote"],["Vassoura","unidade"]
+].map(([nome,unidade])=>({nome,unidade,estoqueMin:0,estoqueIdeal:0,refPessoaMes:0}));
+
+function novoBanco(){
+  return {versao:2, catalogo:{materiais:JSON.parse(JSON.stringify(MATERIAIS_PADRAO)), destinos:[{nome:"Canteiro de obras",tipo:"obra",moradores:0}], admins:[]}, liberacoes:[], movimentos:[]};
+}
+function normaliza(d){
+  d = (d && typeof d==="object") ? d : novoBanco();
+  const c = d.catalogo = d.catalogo || {};
+  c.materiais = c.materiais || [];
+  if(!Array.isArray(c.destinos)){
+    c.destinos = (c.alojamentos||[]).map(n=>({nome:n, tipo:"alojamento", moradores:0}));
+  }
+  delete c.alojamentos;
+  c.admins = c.admins || [];
+  d.liberacoes = d.liberacoes || [];
+  d.movimentos = d.movimentos || [];
+  d.versao = 2;
+  return d;
+}
+
+/* ---------- Utilidades ---------- */
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const fmt = ts => ts ? new Date(ts).toLocaleString("pt-BR",{day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit"}) : "";
+const fmtDia = ts => ts ? new Date(ts).toLocaleDateString("pt-BR") : "";
+const money = v => (Number.isFinite(v) && v>0) ? v.toLocaleString("pt-BR",{style:"currency",currency:"BRL"}) : "—";
+const num = v => Number(v)||0;
+const nf = v => (Math.round(num(v)*10)/10).toLocaleString("pt-BR");
+const STATUS_TXT = {liberada:"Aguardando retirada", entregue:"Entregue"};
+function toast(msg, type){ showToast(msg, type); }
+function uid(){ return Date.now().toString(36) + Math.random().toString(36).slice(2,7); }
+function genCode(){ const a="ABCDEFGHJKLMNPQRSTUVWXYZ23456789"; let s=""; for(const n of crypto.getRandomValues(new Uint32Array(4))) s+=a[n%a.length]; return s; }
+function csvCell(v){ const s=String(v??""); return /[;"\n]/.test(s) ? '"'+s.replace(/"/g,'""')+'"' : s; }
+function baixarCSV(nome, linhas){
+  const blob=new Blob(["\uFEFF"+linhas.join("\r\n")],{type:"text/csv;charset=utf-8"});
+  const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download=nome; document.body.appendChild(a); a.click();
+  setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); },1000);
+}
+function mesAtual(){ const d=new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}`; }
+function faixaMes(mes){ if(!mes) return [0,Infinity]; const [y,m]=mes.split("-").map(Number); return [new Date(y,m-1,1).getTime(), new Date(y,m,1).getTime()]; }
+function diasDesde(ts){ return Math.floor((Date.now()-ts)/86400000); }
+
+/* ---------- Estado ---------- */
+let D = null, remoteSha = null, login = "", busy = 0, loaded = false;
+let form = {destino:"", nome:"", quarto:"", obs:"", qtd:{}, outro:"", outroQtd:1};
+const retirado = {};
+let lastSent = null, lastRetSig = null, prevMatLen = -1;
+
+const mats = () => (D && D.catalogo.materiais) || [];
+const destinos = () => (D && D.catalogo.destinos) || [];
+const destOf = l => l.destino || l.alojamento || "—";
+const destInfo = nome => destinos().find(x=>x.nome===nome);
+const tipoOf = l => l.tipoDestino || (destInfo(destOf(l))||{}).tipo || "alojamento";
+const statusOf = l => l.entrega ? "entregue" : "liberada";
+function isAdmin(){
+  const a=((D && D.catalogo.admins)||[]).map(x=>x.toLowerCase());
+  return !a.length || (!!login && a.includes(login.toLowerCase()));
+}
+
+/* ---------- Leitura e gravação no GitHub ---------- */
+async function carregar(){
+  setSyncStatus("Carregando dados…");
+  try{
+    const r = await ghLoad(DATA_PATH);
+    if(r.data === null){
+      D = normaliza(null); remoteSha = r.sha;
+      remoteSha = await ghSave(DATA_PATH, D, remoteSha, "Cria controle de material de limpeza");
+    }else{ D = normaliza(r.data); remoteSha = r.sha; }
+    try{ localStorage.setItem("limpeza_backup_v1", JSON.stringify(D)); }catch(e){}
+    loaded = true; $("#global-banner").innerHTML = "";
+    setSyncStatus("Dados sincronizados","ok");
+  }catch(e){
+    console.error(e);
+    try{ const raw=localStorage.getItem("limpeza_backup_v1"); if(raw) D=normaliza(JSON.parse(raw)); }catch(_){}
+    const motivo = (e && e.message==="Sem token") ? "Nenhum token foi informado." : (e instanceof TypeError) ? "Sem internet ou o acesso ao GitHub foi bloqueado pela rede." : (e && e.message) || String(e);
+    $("#global-banner").innerHTML = `<div class="banner"><strong>Sem conexão com o GitHub.</strong> ${esc(motivo)} ${D?"Exibindo a última cópia salva neste navegador; alterações ficam bloqueadas até reconectar.":""}</div>`;
+    setSyncStatus("Sem conexão com o GitHub","err");
+  }
+}
+/* Aplica a alteração sobre a versão mais recente do arquivo e grava.
+   Se outra pessoa salvou no meio, busca de novo e reaplica. */
+async function alterar(fn, msg){
+  if(!loaded){ toast("Sem conexão com o GitHub.","err"); return false; }
+  busy++; setSyncStatus("Salvando…");
+  try{
+    for(let tentativa=0; tentativa<4; tentativa++){
+      const r = await ghLoad(DATA_PATH);
+      const dados = normaliza(r.data);
+      if(fn(dados) === false){ setSyncStatus("Nada alterado","ok"); return false; }
+      try{
+        remoteSha = await ghSave(DATA_PATH, dados, r.sha, msg);
+        D = dados;
+        try{ localStorage.setItem("limpeza_backup_v1", JSON.stringify(D)); }catch(e){}
+        setSyncStatus("Salvo no GitHub","ok");
+        renderTudo();
+        return true;
+      }catch(e){
+        if(e.status===409 || e.status===422){ await new Promise(r=>setTimeout(r, 400+Math.random()*600)); continue; }
+        throw e;
+      }
+    }
+    throw new Error("Muitas alterações ao mesmo tempo. Tente de novo.");
+  }catch(e){
+    console.error(e); setSyncStatus("Erro ao salvar","err");
+    toast(e.message && e.message.length<160 ? e.message : "Não foi possível salvar no GitHub.","err");
+    return false;
+  }finally{ busy--; }
+}
+async function atualizarRemoto(){
+  if(busy>0 || document.hidden || !loaded) return;
+  try{
+    const r = await ghLoad(DATA_PATH);
+    if(r.data!==null && r.sha!==remoteSha && busy===0){
+      D=normaliza(r.data); remoteSha=r.sha;
+      try{ localStorage.setItem("limpeza_backup_v1", JSON.stringify(D)); }catch(e){}
+      renderTudo();
+    }
+  }catch(e){ console.warn("Falha ao atualizar", e); }
+}
+
+/* ---------- Cálculos ---------- */
+function custoMedio(){
+  const acc=new Map();
+  for(const x of (D?D.movimentos:[])){
+    if(x.tipo!=="entrada" || !(num(x.preco)>0)) continue;
+    const a=acc.get(x.nome)||{q:0,v:0}; a.q+=num(x.qtd); a.v+=num(x.qtd)*num(x.preco); acc.set(x.nome,a);
+  }
+  const m=new Map(); for(const [k,a] of acc) if(a.q>0) m.set(k,a.v/a.q); return m;
+}
+function estoque(){
+  const m=new Map(), cm=custoMedio();
+  for(const c of mats()){
+    const min=num(c.estoqueMin), ideal=num(c.estoqueIdeal)||min*2;
+    m.set(c.nome,{nome:c.nome, unidade:c.unidade||"unidade", min, ideal, ref:num(c.refPessoaMes), preco:cm.get(c.nome)||0, entrada:0, ajuste:0, saida:0, reservado:0});
+  }
+  if(D){
+    for(const x of D.movimentos){ const r=m.get(x.nome); if(!r) continue; if(x.tipo==="entrada") r.entrada+=num(x.qtd); else r.ajuste+=num(x.qtd); }
+    for(const l of D.liberacoes) for(const i of l.itens){ const r=m.get(i.nome); if(!r) continue; if(l.entrega) r.saida+=num(i.qtd); else r.reservado+=num(i.qtd); }
+  }
+  for(const r of m.values()){ r.saldo=r.entrada+r.ajuste-r.saida; r.disp=r.saldo-r.reservado; r.low=r.min>0 && r.disp<=r.min; r.comprar=r.low ? Math.max(0, r.ideal-r.disp) : 0; }
+  return m;
+}
+function saldoEm(dados, nome){
+  let s=0;
+  for(const x of dados.movimentos) if(x.nome===nome) s+=num(x.qtd);
+  for(const l of dados.liberacoes) if(l.entrega) for(const i of l.itens) if(i.nome===nome) s-=num(i.qtd);
+  return s;
+}
+/* Quanto um destino já recebeu (entregue + liberado) de um material no mês corrente */
+function usadoNoMes(destino, nome){
+  const [ini,fim]=faixaMes(mesAtual()); let s=0;
+  for(const l of (D?D.liberacoes:[])) if(destOf(l)===destino && l.em>=ini && l.em<fim) for(const i of l.itens) if(i.nome===nome) s+=num(i.qtd);
+  return s;
+}
+function custoLib(l, cm){ cm=cm||custoMedio(); let v=0, completo=true; for(const i of l.itens){ const p=cm.get(i.nome); if(p) v+=p*num(i.qtd); else completo=false; } return {v, completo}; }
+function paradas(){ return D ? D.liberacoes.filter(l=>!l.entrega && diasDesde(l.em)>=DIAS_PARADA) : []; }
+
+/* ---------- Abas e permissões ---------- */
+const VIEWS=["liberar","almoxarifado","estoque","consumo","historico","cadastros"];
+const ADM_VIEWS=["liberar","cadastros"];
+let viewAtual="liberar";
+function go(v){
+  if(!VIEWS.includes(v)) v = isAdmin() ? "liberar" : "almoxarifado";
+  if(ADM_VIEWS.includes(v) && !isAdmin()) v="almoxarifado";
+  viewAtual=v;
+  document.querySelectorAll("#limpezaScreen .lz-tab").forEach(t=>t.setAttribute("aria-selected", t.dataset.v===v?"true":"false"));
+  document.querySelectorAll("#limpezaScreen section.lz-view").forEach(s=>s.classList.toggle("on", s.id==="v-"+v));
+  try{ history.replaceState(null,"","#limpeza-"+v); }catch(e){}
+}
+document.querySelectorAll("#limpezaScreen .lz-tab").forEach(t=>t.addEventListener("click",()=>go(t.dataset.v)));
+function renderPermissoes(){
+  const adm=isAdmin();
+  document.querySelectorAll("#limpezaScreen [data-adm]").forEach(t=>t.hidden=!adm);
+  $("#m-opt-contagem").hidden=!adm; $("#m-opt-contagem").disabled=!adm;
+  if(!adm && $("#m-tipo").value==="contagem") $("#m-tipo").value="entrada";
+  const base="Os dados são salvos online (no GitHub) e compartilhados com quem tem acesso. Alterações de outras pessoas aparecem automaticamente em até 30 segundos.";
+  $("#who").textContent = base + (login ? ` Conectado como ${login}${adm?" (administrador)":" (almoxarifado)"}.` : "");
+  if(ADM_VIEWS.includes(viewAtual) && !adm) go("almoxarifado");
+}
+
+/* ---------- Nova liberação ---------- */
+function opcoesDestino(sel){
+  const g=t=>destinos().filter(d=>d.tipo===t).map(d=>`<option value="${esc(d.nome)}" ${d.nome===sel?"selected":""}>${esc(d.nome)}</option>`).join("");
+  const al=g("alojamento"), ob=g("obra");
+  return `<option value="">Escolha…</option>${al?`<optgroup label="Alojamentos">${al}</optgroup>`:""}${ob?`<optgroup label="Obra">${ob}</optgroup>`:""}`;
+}
+function renderForm(){
+  const el=$("#form-area");
+  if(!D){ el.innerHTML=`<p class="meta">Carregando…</p>`; return; }
+  if(!destinos().length){ el.innerHTML=`<div class="lz-empty">Cadastre pelo menos um destino (alojamento ou frente da obra) na aba Cadastros.</div>`; return; }
+  const ms=mats();
+  el.innerHTML=`
+    <div class="grid2">
+      <label class="f">Destino<select id="f-dest">${opcoesDestino(form.destino)}</select></label>
+      <label class="f">Colaborador ou responsável<input type="text" id="f-nome" value="${esc(form.nome)}"></label>
+      <label class="f"><span>Quarto, casa ou setor <span class="opt">(opcional)</span></span><input type="text" id="f-quarto" value="${esc(form.quarto)}"></label>
+      <div class="meta" id="f-cota" style="align-self:end"></div>
+    </div>
+    ${ms.length?`<div class="mat-list">${ms.map((m,i)=>{const q=form.qtd[i]||0; return `
+      <div class="mat ${q?"sel":""}" data-i="${i}">
+        <div><div class="nm">${esc(m.nome)}</div><div class="un">${esc(m.unidade||"unidade")}</div><div class="disp"></div></div>
+        <div class="step"><button type="button" data-dec="${i}" aria-label="Diminuir ${esc(m.nome)}">−</button><output>${q}</output><button type="button" data-inc="${i}" aria-label="Aumentar ${esc(m.nome)}">+</button></div>
+      </div>`}).join("")}</div>`
+      :`<div class="lz-empty" style="margin:14px 0">Nenhum material cadastrado ainda. Cadastre na aba Cadastros.</div>`}
+    <div class="grid2">
+      <label class="f"><span>Outro item <span class="opt">(se não estiver na lista)</span></span><input type="text" id="f-outro" value="${esc(form.outro)}"></label>
+      <label class="f">Quantidade do outro item<input type="number" min="1" id="f-outroq" value="${esc(form.outroQtd)}"></label>
+    </div>
+    <label class="f" style="margin-top:12px"><span>Observação para o almoxarifado <span class="opt">(opcional)</span></span><textarea id="f-obs">${esc(form.obs)}</textarea></label>
+    <div class="row end" style="margin-top:14px"><button class="lz-btn primary" id="f-enviar">Liberar para retirada</button></div>`;
+  $("#f-dest").onchange=e=>{ form.destino=e.target.value; updateDisp(); };
+  $("#f-nome").oninput=e=>form.nome=e.target.value;
+  $("#f-quarto").oninput=e=>form.quarto=e.target.value;
+  $("#f-obs").oninput=e=>form.obs=e.target.value;
+  $("#f-outro").oninput=e=>form.outro=e.target.value;
+  $("#f-outroq").oninput=e=>form.outroQtd=e.target.value;
+  el.querySelectorAll("[data-inc],[data-dec]").forEach(b=>b.onclick=()=>{
+    const i=b.dataset.inc ?? b.dataset.dec; const d=b.dataset.inc!==undefined?1:-1;
+    form.qtd[i]=Math.max(0,(form.qtd[i]||0)+d);
+    const card=b.closest(".mat"); card.querySelector("output").textContent=form.qtd[i]; card.classList.toggle("sel",form.qtd[i]>0);
+    updateDisp();
+  });
+  $("#f-enviar").onclick=liberar;
+  updateDisp();
+}
+function updateDisp(est){
+  if(!$("#form-area .mat") && !$("#f-cota")) return;
+  est=est||estoque();
+  const dest=destInfo(form.destino), aloj=dest && dest.tipo==="alojamento" && num(dest.moradores)>0;
+  document.querySelectorAll("#form-area .mat").forEach(card=>{
+    const i=card.dataset.i, m=mats()[i]; if(!m) return;
+    const r=est.get(m.nome), q=form.qtd[i]||0, sp=card.querySelector(".disp"); if(!r||!sp) return;
+    let txt=`Disponível: ${r.disp}`, over=q>0 && q>r.disp;
+    if(aloj && r.ref>0){
+      const cota=r.ref*num(dest.moradores), usado=usadoNoMes(dest.nome,m.nome);
+      txt+=` · cota do mês: ${nf(usado)}/${nf(cota)}`;
+      if(q>0 && usado+q>cota) over=true;
+    }
+    sp.textContent=txt; card.classList.toggle("over", over);
+  });
+  const c=$("#f-cota");
+  if(c) c.textContent = !dest ? "" : dest.tipo==="obra" ? "Destino da obra: sem cota por pessoa." : num(dest.moradores)>0 ? `${num(dest.moradores)} moradores. A cota aparece em cada material com referência cadastrada.` : "Informe os moradores deste alojamento em Cadastros para ativar a cota.";
+}
+async function liberar(){
+  const dest=destInfo(form.destino), nome=form.nome.trim();
+  if(!dest){ toast("Escolha o destino.","err"); $("#f-dest").focus(); return; }
+  if(!nome){ toast("Informe o colaborador ou responsável.","err"); $("#f-nome").focus(); return; }
+  const itens=[];
+  mats().forEach((m,i)=>{ if(form.qtd[i]>0) itens.push({nome:m.nome, unidade:m.unidade||"unidade", qtd:form.qtd[i]}); });
+  if(form.outro.trim()) itens.push({nome:form.outro.trim(), unidade:"unidade", qtd:Math.max(1,parseInt(form.outroQtd,10)||1)});
+  if(!itens.length){ toast("Escolha pelo menos um material.","err"); return; }
+  const est=estoque(), avisos=[];
+  for(const i of itens){
+    const r=est.get(i.nome); if(!r) continue;
+    if(i.qtd>r.disp) avisos.push(`• ${i.nome}: pedido ${i.qtd}, disponível em estoque ${r.disp}`);
+    if(dest.tipo==="alojamento" && num(dest.moradores)>0 && r.ref>0){
+      const cota=r.ref*num(dest.moradores), usado=usadoNoMes(dest.nome,i.nome);
+      if(usado+i.qtd>cota) avisos.push(`• ${i.nome}: ${dest.nome} já recebeu ${usado} este mês; com este pedido vai a ${usado+i.qtd}, acima da cota de ${nf(cota)}`);
+    }
+  }
+  if(avisos.length && !confirm("Atenção:\n"+avisos.join("\n")+"\n\nLiberar mesmo assim?")) return;
+  const btn=$("#f-enviar"); btn.disabled=true;
+  const lib={id:uid(), codigo:genCode(), nome, destino:dest.nome, tipoDestino:dest.tipo, quarto:form.quarto.trim(), obs:form.obs.trim(), itens, em:Date.now(), por:login, entrega:null};
+  const ok=await alterar(d=>{ d.liberacoes.push(lib); }, `Libera material para ${dest.nome} (${lib.codigo})`);
+  btn.disabled=false;
+  if(ok){
+    lastSent={codigo:lib.codigo, nome, destino:dest.nome, id:lib.id};
+    form={destino:dest.nome, nome:"", quarto:"", obs:"", qtd:{}, outro:"", outroQtd:1};
+    renderForm(); renderSent(); window.scrollTo({top:0,behavior:"smooth"});
+  }
+}
+function renderSent(){
+  $("#sent").innerHTML = lastSent ? `<div class="success"><strong>Liberado para ${esc(lastSent.nome)} (${esc(lastSent.destino)}).</strong> Código de retirada: <span class="code">${esc(lastSent.codigo)}</span><br>A liberação já aparece no almoxarifado. <button class="lz-btn link" id="sent-print" style="color:inherit">Imprimir vale</button></div>` : "";
+  const b=$("#sent-print"); if(b) b.onclick=()=>{ const l=D.liberacoes.find(x=>x.id===lastSent.id); if(l) imprimir(l); };
+}
+function renderLibAlerta(){
+  const p=paradas();
+  $("#lib-alerta").innerHTML = p.length ? `<div class="banner">${p.length===1?"1 liberação está parada":"" + p.length + " liberações estão paradas"} há ${DIAS_PARADA} dias ou mais sem retirada, reservando estoque. Veja na aba Almoxarifado.</div>` : "";
+}
+
+/* ---------- Almoxarifado ---------- */
+function renderRet(force){
+  const el=$("#ret-list"), adm=isAdmin();
+  const q=($("#busca-ret").value||"").trim().toLowerCase();
+  let ret=D ? D.liberacoes.filter(l=>!l.entrega).sort((a,b)=>a.em-b.em) : [];
+  $("#c-ret").textContent = ret.length || "";
+  const p=paradas();
+  $("#ret-alerta").innerHTML = p.length ? `<div class="banner"><strong>${p.length===1?"1 liberação parada":p.length+" liberações paradas"}</strong> há ${DIAS_PARADA} dias ou mais. Se não forem mais retiradas, ${adm?"cancele para liberar o estoque reservado":"avise quem liberou para cancelar"}.</div>` : "";
+  if(q) ret=ret.filter(l=>(l.codigo+" "+l.nome+" "+destOf(l)).toLowerCase().includes(q));
+  const sig=ret.map(r=>r.id).join("|")+"#"+q+"#"+adm+"#"+new Date().toDateString();
+  if(force || sig!==lastRetSig){
+    lastRetSig=sig;
+    if(!D) el.innerHTML=`<p class="meta">Carregando…</p>`;
+    else if(!ret.length) el.innerHTML=`<div class="lz-empty">${q?"Nada encontrado com essa busca.":"Nenhuma liberação esperando retirada."}</div>`;
+    else{
+      el.innerHTML=ret.map(l=>{
+        if(retirado[l.id]===undefined) retirado[l.id]=l.nome;
+        const dias=diasDesde(l.em);
+        return `<div class="vale" data-id="${esc(l.id)}">
+          <div class="stub"><small>Código de retirada</small><div class="code">${esc(l.codigo)}</div><small>Liberado ${fmt(l.em)}</small></div>
+          <div class="body">
+            <div class="card-h"><div><div class="nm" style="font-size:16px">${esc(l.nome)}</div>
+            <div class="meta">${esc(destOf(l))}${l.quarto?" · "+esc(l.quarto):""}${l.por?" · liberado por "+esc(l.por):""}</div></div>
+            ${dias>=DIAS_PARADA?`<span class="lz-badge b-warn">Parada há ${dias} dias</span>`:""}</div>
+            ${itemsHtml(l.itens)}
+            ${l.obs?`<p class="obs">${esc(l.obs)}</p>`:""}
+            <div class="inline-form"><input type="text" data-quem value="${esc(retirado[l.id])}" aria-label="Quem retirou" placeholder="Quem retirou"><button class="lz-btn ok" data-entregar>Registrar entrega</button></div>
+            <div class="row end"><button class="lz-btn link" data-print>Imprimir vale</button>${adm?`<button class="lz-btn link" data-cancelar>Cancelar liberação</button>`:""}</div>
+          </div></div>`;
+      }).join("");
+      el.querySelectorAll(".vale").forEach(v=>{
+        const id=v.dataset.id;
+        v.querySelector("[data-quem]").oninput=e=>retirado[id]=e.target.value;
+        v.querySelector("[data-print]").onclick=()=>{ const l=D.liberacoes.find(x=>x.id===id); if(l) imprimir(l); };
+        v.querySelector("[data-entregar]").onclick=async e=>{
+          const quem=(retirado[id]||"").trim(); if(!quem){ toast("Informe quem retirou.","err"); return; }
+          e.target.disabled=true;
+          const ok=await alterar(d=>{ const l=d.liberacoes.find(x=>x.id===id); if(!l){ toast("Essa liberação foi cancelada.","err"); return false; } if(l.entrega){ toast("Essa entrega já foi registrada."); return false; } l.entrega={em:Date.now(), por:login, retiradoPor:quem}; }, `Registra entrega ${id}`);
+          if(ok){ delete retirado[id]; toast("Entrega registrada.","ok"); } else e.target.disabled=false;
+        };
+        const c=v.querySelector("[data-cancelar]");
+        if(c) c.onclick=async()=>{
+          if(!confirm("Cancelar esta liberação? O estoque reservado volta a ficar disponível.")) return;
+          const ok=await alterar(d=>{ const i=d.liberacoes.findIndex(x=>x.id===id && !x.entrega); if(i<0) return false; d.liberacoes.splice(i,1); }, `Cancela liberação ${id}`);
+          if(ok) toast("Liberação cancelada.","ok");
+        };
+      });
+    }
+  }
+  const hoje=new Date(); hoje.setHours(0,0,0,0);
+  const feitas=D ? D.liberacoes.filter(l=>l.entrega && l.entrega.em>=hoje.getTime()).sort((a,b)=>b.entrega.em-a.entrega.em) : [];
+  $("#hoje-list").innerHTML = feitas.length ? feitas.map(l=>`<div class="lz-card"><div class="card-h"><div><div class="nm">${esc(l.nome)} · <span class="code">${esc(l.codigo)}</span></div><div class="meta">${esc(destOf(l))} · retirado por ${esc(l.entrega.retiradoPor)} às ${new Date(l.entrega.em).toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"})}</div></div><div class="row">${badge("entregue")}<button class="lz-btn link" data-print-ent="${esc(l.id)}">Comprovante</button></div></div>${itemsHtml(l.itens)}</div>`).join("") : `<div class="lz-empty">Nenhuma entrega registrada hoje.</div>`;
+  document.querySelectorAll("[data-print-ent]").forEach(b=>b.onclick=()=>{ const l=D.liberacoes.find(x=>x.id===b.dataset.printEnt); if(l) imprimir(l); });
+}
+function itemsHtml(items){ return `<ul class="items">${(items||[]).map(i=>`<li><span>${esc(i.nome)}</span><span class="q">${esc(i.qtd)} ${esc(i.unidade||"")}</span></li>`).join("")}</ul>`; }
+function badge(st){ return `<span class="lz-badge ${st==="entregue"?"b-ent":"b-lib"}">${STATUS_TXT[st]}</span>`; }
+$("#busca-ret").addEventListener("input",()=>renderRet());
+
+/* ---------- Vale / comprovante para imprimir ---------- */
+function imprimir(l){
+  let el=document.getElementById("lz-print");
+  if(!el){ el=document.createElement("div"); el.id="lz-print"; document.body.appendChild(el); }
+  const ent=l.entrega;
+  el.innerHTML=`
+    <div class="pv-head"><div><div class="pv-eyebrow">Auguri · Controle Administrativo</div><h1>${ent?"Comprovante de retirada":"Vale de retirada"}: material de limpeza</h1></div><div class="pv-code">${esc(l.codigo)}</div></div>
+    <table class="pv-info"><tr><th>Colaborador / responsável</th><td>${esc(l.nome)}</td><th>Destino</th><td>${esc(destOf(l))}${l.quarto?" · "+esc(l.quarto):""}</td></tr>
+    <tr><th>Liberado em</th><td>${fmt(l.em)}</td><th>Liberado por</th><td>${esc(l.por||"—")}</td></tr>
+    ${ent?`<tr><th>Retirado em</th><td>${fmt(ent.em)}</td><th>Retirado por</th><td>${esc(ent.retiradoPor)}</td></tr>`:""}</table>
+    <table class="pv-itens"><thead><tr><th>Material</th><th class="n">Quantidade</th><th>Unidade</th></tr></thead><tbody>${l.itens.map(i=>`<tr><td>${esc(i.nome)}</td><td class="n">${esc(i.qtd)}</td><td>${esc(i.unidade)}</td></tr>`).join("")}</tbody></table>
+    ${l.obs?`<p class="pv-obs"><strong>Observação:</strong> ${esc(l.obs)}</p>`:""}
+    <div class="pv-sign"><div><span></span>Assinatura de quem retirou</div><div><span></span>Almoxarifado</div></div>
+    <p class="pv-foot">Data: ____/____/______ · Impresso em ${fmt(Date.now())}</p>`;
+  window.print();
+}
+
+/* ---------- Estoque ---------- */
+function renderEstoque(){
+  const est=estoque(), rows=[...est.values()];
+  $("#c-low").textContent = rows.filter(r=>r.low).length || "";
+  if(!D) $("#est-tabela").innerHTML=`<p class="meta" style="margin:0">Carregando…</p>`;
+  else if(!rows.length) $("#est-tabela").innerHTML=`<p class="meta" style="margin:0">Nenhum material cadastrado.</p>`;
+  else{
+    rows.sort((a,b)=>(b.low-a.low)||a.nome.localeCompare(b.nome,"pt-BR"));
+    $("#est-tabela").innerHTML=`<table><thead><tr><th>Material</th><th class="n">Em estoque</th><th class="n">Reservado</th><th class="n">Disponível</th><th class="n">Mínimo</th><th class="n">Custo médio</th><th class="n">Valor em estoque</th><th>Situação</th></tr></thead><tbody>${rows.map(r=>`<tr class="${r.low?"low":""}"><td>${esc(r.nome)} <span class="meta">(${esc(r.unidade)})</span></td><td class="n ${r.saldo<0?"neg":""}">${r.saldo}</td><td class="n">${r.reservado||"—"}</td><td class="n ${r.disp<0?"neg":""}">${r.disp}</td><td class="n">${r.min||"—"}</td><td class="n">${money(r.preco)}</td><td class="n">${money(r.preco*Math.max(0,r.saldo))}</td><td>${r.low?`<span class="lz-badge b-red">Repor</span>`:r.min?`<span class="lz-badge b-ent">OK</span>`:""}</td></tr>`).join("")}</tbody></table>`;
+  }
+  // lista de compra
+  const compra=rows.filter(r=>r.low && r.comprar>0).sort((a,b)=>a.nome.localeCompare(b.nome,"pt-BR"));
+  const totalCompra=compra.reduce((s,r)=>s+r.comprar*r.preco,0);
+  $("#compra").innerHTML = compra.length ? `<table><thead><tr><th>Material</th><th class="n">Disponível</th><th class="n">Ideal</th><th class="n">Comprar</th><th>Unidade</th><th class="n">Custo estimado</th></tr></thead><tbody>${compra.map(r=>`<tr><td>${esc(r.nome)}</td><td class="n">${r.disp}</td><td class="n">${r.ideal}</td><td class="n">${r.comprar}</td><td>${esc(r.unidade)}</td><td class="n">${money(r.comprar*r.preco)}</td></tr>`).join("")}<tr><td colspan="5"><strong>Total estimado</strong></td><td class="n">${money(totalCompra)}</td></tr></tbody></table>${compra.some(r=>!r.preco)?`<p class="meta" style="margin:8px 0 0">Itens sem preço ficam fora do total. O custo vem do preço informado nas entradas.</p>`:""}`
+    : `<p class="meta" style="margin:0">Nada para comprar agora. Itens entram aqui quando o disponível chega ao estoque mínimo.</p>`;
+  $("#btn-copiar-compra").disabled = $("#btn-csv-compra").disabled = !compra.length;
+  // movimentações
+  const lista=[];
+  if(D){
+    for(const x of D.movimentos) lista.push({em:x.em, nome:x.nome, tipo:x.tipo==="entrada"?"Entrada":"Contagem", qtd:num(x.qtd), info:x.tipo==="entrada"?[x.preco?money(num(x.preco))+"/un":"", x.obs||""].filter(Boolean).join(" · "):`contado ${x.contado}${x.obs?" · "+x.obs:""}`, por:x.por||""});
+    for(const l of D.liberacoes) if(l.entrega) for(const i of l.itens) if(est.has(i.nome)) lista.push({em:l.entrega.em, nome:i.nome, tipo:"Saída", qtd:-num(i.qtd), info:`${l.nome} · ${destOf(l)} · ${l.codigo}`, por:l.entrega.retiradoPor});
+  }
+  lista.sort((a,b)=>b.em-a.em);
+  const top=lista.slice(0,20);
+  $("#mov-tabela").innerHTML = top.length ? `<table><thead><tr><th>Data</th><th>Material</th><th>Tipo</th><th class="n">Qtd</th><th>Detalhe</th><th>Por</th></tr></thead><tbody>${top.map(x=>`<tr><td>${fmt(x.em)}</td><td>${esc(x.nome)}</td><td>${x.tipo}</td><td class="n ${x.qtd<0?"neg":""}">${x.qtd>0?"+":""}${x.qtd}</td><td>${esc(x.info)}</td><td>${esc(x.por)}</td></tr>`).join("")}</tbody></table>` : `<p class="meta" style="margin:0">Nenhuma movimentação ainda. Comece com uma contagem de inventário para lançar o saldo inicial.</p>`;
+  updateMovHint(est); updateDisp(est);
+}
+function listaCompra(){ return [...estoque().values()].filter(r=>r.low && r.comprar>0).sort((a,b)=>a.nome.localeCompare(b.nome,"pt-BR")); }
+$("#btn-copiar-compra").addEventListener("click",async()=>{
+  const c=listaCompra(); if(!c.length) return;
+  const txt="Lista de compra: material de limpeza ("+fmtDia(Date.now())+")\n"+c.map(r=>`- ${r.nome}: ${r.comprar} ${r.unidade}`).join("\n");
+  try{ await navigator.clipboard.writeText(txt); toast("Lista copiada. Cole no e-mail ou WhatsApp.","ok"); }
+  catch(e){ prompt("Copie a lista:", txt); }
+});
+$("#btn-csv-compra").addEventListener("click",()=>{
+  const lines=[["Material","Disponível","Ideal","Comprar","Unidade","Custo médio","Custo estimado"].join(";")];
+  for(const r of listaCompra()) lines.push([r.nome,r.disp,r.ideal,r.comprar,r.unidade,r.preco?r.preco.toFixed(2).replace(".",","):"",r.preco?(r.comprar*r.preco).toFixed(2).replace(".",","):""].map(csvCell).join(";"));
+  baixarCSV(`lista-compra-limpeza-${new Date().toISOString().slice(0,10)}.csv`, lines);
+});
+function renderMovForm(){
+  const sel=$("#m-mat"), cur=sel.value;
+  sel.innerHTML=mats().map(m=>`<option value="${esc(m.nome)}" ${m.nome===cur?"selected":""}>${esc(m.nome)} (${esc(m.unidade)})</option>`).join("");
+}
+function updateMovHint(est){
+  est=est||estoque();
+  const tipo=$("#m-tipo").value, r=est.get($("#m-mat").value);
+  $("#m-qlabel").textContent = tipo==="entrada" ? "Quantidade recebida" : "Quantidade contada na prateleira";
+  $("#m-salvar").textContent = tipo==="entrada" ? "Registrar entrada" : "Registrar contagem";
+  $("#m-preco-wrap").style.display = tipo==="entrada" ? "" : "none";
+  if(!r){ $("#m-hint").textContent=""; return; }
+  const q=parseInt($("#m-qtd").value,10);
+  if(tipo==="entrada") $("#m-hint").textContent = `Saldo atual: ${r.saldo} ${r.unidade}` + (q>0?` → ficará ${r.saldo+q}`:"") + (r.preco?` · custo médio atual ${money(r.preco)}`:"");
+  else $("#m-hint").textContent = `O painel calcula ${r.saldo} ${r.unidade} em estoque` + (Number.isFinite(q)?` → ajuste de ${q-r.saldo>0?"+":""}${q-r.saldo}`:"") + ". Conte também o que está reservado e ainda não foi retirado.";
+}
+["#m-mat","#m-tipo","#m-qtd"].forEach(s=>$(s).addEventListener("input",()=>updateMovHint()));
+$("#m-salvar").addEventListener("click",async e=>{
+  const nome=$("#m-mat").value, tipo=$("#m-tipo").value, q=parseInt($("#m-qtd").value,10), obs=$("#m-obs").value.trim();
+  const preco=Math.max(0, parseFloat(String($("#m-preco").value).replace(",","."))||0);
+  const mat=mats().find(m=>m.nome===nome);
+  if(!mat){ toast("Escolha um material.","err"); return; }
+  if(tipo==="contagem" && !isAdmin()){ toast("Só administradores fazem contagem.","err"); return; }
+  if(!Number.isFinite(q) || q<0 || (tipo==="entrada" && q===0)){ toast("Informe uma quantidade válida.","err"); $("#m-qtd").focus(); return; }
+  e.target.disabled=true;
+  const ok=await alterar(d=>{
+    const base={id:uid(), nome, unidade:mat.unidade||"unidade", obs, em:Date.now(), por:login};
+    if(tipo==="entrada") d.movimentos.push({...base, tipo:"entrada", qtd:q, preco: preco||undefined});
+    else d.movimentos.push({...base, tipo:"ajuste", qtd:q-saldoEm(d,nome), contado:q});
+  }, tipo==="entrada" ? `Entrada: +${q} ${nome}` : `Contagem: ${nome} = ${q}`);
+  e.target.disabled=false;
+  if(ok){ $("#m-qtd").value=""; $("#m-obs").value=""; $("#m-preco").value=""; toast(tipo==="entrada" ? `Entrada registrada: +${q} ${nome}` : `Contagem registrada: ${nome} = ${q}`,"ok"); }
+});
+$("#btn-csv-est").addEventListener("click",()=>{
+  const lines=[["Material","Unidade","Em estoque","Reservado","Disponível","Mínimo","Ideal","Custo médio","Valor em estoque","Situação"].join(";")];
+  for(const r of estoque().values()) lines.push([r.nome,r.unidade,r.saldo,r.reservado,r.disp,r.min,r.ideal,r.preco?r.preco.toFixed(2).replace(".",","):"",r.preco?(r.preco*Math.max(0,r.saldo)).toFixed(2).replace(".",","):"",r.low?"Repor":"OK"].map(csvCell).join(";"));
+  baixarCSV(`estoque-limpeza-${new Date().toISOString().slice(0,10)}.csv`, lines);
+});
+
+/* ---------- Consumo ---------- */
+function dadosConsumo(){
+  const mes=$("#c-mes").value, tipo=$("#c-tipo").value, [ini,fim]=faixaMes(mes), cm=custoMedio(), est=estoque();
+  const libs=D ? D.liberacoes.filter(l=>l.entrega && l.entrega.em>=ini && l.entrega.em<fim && (!tipo || tipoOf(l)===tipo)) : [];
+  const porDest=new Map(), porMat=new Map();
+  for(const l of libs){
+    const k=destOf(l);
+    const d=porDest.get(k)||{nome:k, tipo:tipoOf(l), entregas:0, custo:0, itens:new Map()};
+    d.entregas++; d.custo+=custoLib(l,cm).v;
+    for(const i of l.itens){
+      d.itens.set(i.nome,(d.itens.get(i.nome)||0)+num(i.qtd));
+      const m=porMat.get(i.nome)||{nome:i.nome, unidade:i.unidade, qtd:0, custo:0};
+      m.qtd+=num(i.qtd); m.custo+=num(i.qtd)*(cm.get(i.nome)||0); porMat.set(i.nome,m);
+    }
+    porDest.set(k,d);
+  }
+  for(const d of porDest.values()){
+    const info=destInfo(d.nome); d.moradores=info?num(info.moradores):0;
+    d.porPessoa = d.tipo==="alojamento" && d.moradores>0 ? d.custo/d.moradores : 0;
+    d.acima=[];
+    if(mes && d.tipo==="alojamento" && d.moradores>0){
+      for(const [nome,q] of d.itens){ const r=est.get(nome); if(r && r.ref>0){ const cota=r.ref*d.moradores; if(q>cota) d.acima.push(`${nome} (${nf(q)} de ${nf(cota)})`); } }
+    }
+  }
+  return {mes, libs, porDest:[...porDest.values()], porMat:[...porMat.values()]};
+}
+function renderConsumo(){
+  const c=dadosConsumo();
+  const total=c.porDest.reduce((s,d)=>s+d.custo,0);
+  const aloj=c.porDest.filter(d=>d.tipo==="alojamento" && d.moradores>0);
+  const pessoas=aloj.reduce((s,d)=>s+d.moradores,0), custoAloj=aloj.reduce((s,d)=>s+d.custo,0);
+  const media=pessoas ? custoAloj/pessoas : 0;
+  const acima=c.porDest.filter(d=>d.acima.length).length;
+  $("#c-stats").innerHTML=`
+    <div class="stat"><div class="label">Entregas no período</div><div class="value">${c.libs.length}</div></div>
+    <div class="stat"><div class="label">Custo estimado</div><div class="value">${money(total)}</div></div>
+    <div class="stat"><div class="label">Custo médio por morador</div><div class="value">${money(media)}</div></div>
+    <div class="stat"><div class="label">Destinos acima da referência</div><div class="value ${acima?"red":""}">${acima}</div></div>`;
+  c.porDest.sort((a,b)=>(b.acima.length>0)-(a.acima.length>0) || b.custo-a.custo || a.nome.localeCompare(b.nome,"pt-BR"));
+  $("#c-dest").innerHTML = c.porDest.length ? `<table><thead><tr><th>Destino</th><th>Tipo</th><th class="n">Moradores</th><th class="n">Entregas</th><th class="n">Custo</th><th class="n">Custo por pessoa</th><th>Acima da referência</th></tr></thead><tbody>${c.porDest.map(d=>{
+      const alto = media>0 && d.porPessoa>media*1.3;
+      return `<tr class="${d.acima.length?"low":""}"><td><strong>${esc(d.nome)}</strong></td><td>${d.tipo==="obra"?"Obra":"Alojamento"}</td><td class="n">${d.tipo==="alojamento"?(d.moradores||"—"):"—"}</td><td class="n">${d.entregas}</td><td class="n">${money(d.custo)}</td><td class="n">${d.porPessoa?money(d.porPessoa):"—"}${alto?` <span class="lz-badge b-warn">alto</span>`:""}</td><td>${d.acima.length?esc(d.acima.join(", ")):(d.tipo==="alojamento"&&d.moradores>0&&c.mes?"Dentro da referência":"—")}</td></tr>`;
+    }).join("")}</tbody></table>${!c.mes?`<p class="meta" style="margin:8px 0 0">Escolha um mês para comparar com a referência de consumo.</p>`:""}`
+    : `<p class="meta" style="margin:0">Nenhuma entrega no período.</p>`;
+  c.porMat.sort((a,b)=>b.custo-a.custo || a.nome.localeCompare(b.nome,"pt-BR"));
+  $("#c-mat").innerHTML = c.porMat.length ? `<table><thead><tr><th>Material</th><th class="n">Quantidade</th><th>Unidade</th><th class="n">Custo estimado</th></tr></thead><tbody>${c.porMat.map(m=>`<tr><td>${esc(m.nome)}</td><td class="n">${m.qtd}</td><td>${esc(m.unidade)}</td><td class="n">${money(m.custo)}</td></tr>`).join("")}</tbody></table>` : `<p class="meta" style="margin:0">Nenhuma entrega no período.</p>`;
+}
+["#c-mes","#c-tipo"].forEach(s=>$(s).addEventListener("input",renderConsumo));
+$("#c-mes").value=mesAtual();
+$("#btn-csv-cons").addEventListener("click",()=>{
+  const c=dadosConsumo();
+  const lines=[["Destino","Tipo","Moradores","Material","Quantidade","Custo estimado"].join(";")];
+  const cm=custoMedio();
+  for(const d of c.porDest) for(const [nome,q] of d.itens) lines.push([d.nome,d.tipo==="obra"?"Obra":"Alojamento",d.moradores||"",nome,q,cm.get(nome)?(q*cm.get(nome)).toFixed(2).replace(".",","):""].map(csvCell).join(";"));
+  baixarCSV(`consumo-limpeza-${c.mes||"todos"}.csv`, lines);
+});
+
+/* ---------- Histórico ---------- */
+function histRows(){
+  if(!D) return [];
+  const [ini,fim]=faixaMes($("#h-mes").value), dest=$("#h-dest").value, st=$("#h-status").value, q=$("#h-busca").value.trim().toLowerCase();
+  return D.liberacoes.filter(l=>{
+    if(l.em<ini||l.em>=fim) return false;
+    if(dest && destOf(l)!==dest) return false;
+    if(st && statusOf(l)!==st) return false;
+    if(q && !(l.nome+" "+l.codigo).toLowerCase().includes(q)) return false;
+    return true;
+  }).sort((a,b)=>b.em-a.em);
+}
+function renderHist(){
+  const sel=$("#h-dest"), cur=sel.value;
+  const ds=D ? [...new Set([...destinos().map(d=>d.nome), ...D.liberacoes.map(destOf)])].filter(Boolean).sort((a,b)=>a.localeCompare(b,"pt-BR")) : [];
+  sel.innerHTML=`<option value="">Todos</option>`+ds.map(a=>`<option ${a===cur?"selected":""}>${esc(a)}</option>`).join("");
+  const rows=histRows(), cm=custoMedio();
+  $("#h-qtd").textContent = rows.length===1 ? "1 liberação" : `${rows.length} liberações`;
+  $("#h-tabela").innerHTML = rows.length ? `<table><thead><tr><th>Data</th><th>Código</th><th>Colaborador</th><th>Destino</th><th>Itens</th><th class="n">Custo</th><th>Situação</th><th>Liberado por</th><th>Retirado por</th><th></th></tr></thead><tbody>${rows.map(l=>`<tr><td>${fmt(l.em)}</td><td><span class="code">${esc(l.codigo)}</span></td><td>${esc(l.nome)}</td><td>${esc(destOf(l))}</td><td>${l.itens.map(i=>`${esc(i.qtd)} ${esc(i.nome)}`).join(", ")}</td><td class="n">${money(custoLib(l,cm).v)}</td><td>${badge(statusOf(l))}</td><td>${esc(l.por||"—")}</td><td>${l.entrega?esc(l.entrega.retiradoPor):"—"}</td><td><button class="lz-btn link" data-print-h="${esc(l.id)}">Imprimir</button></td></tr>`).join("")}</tbody></table>` : `<p class="meta" style="margin:0">Nenhuma liberação com esses filtros.</p>`;
+  document.querySelectorAll("[data-print-h]").forEach(b=>b.onclick=()=>{ const l=D.liberacoes.find(x=>x.id===b.dataset.printH); if(l) imprimir(l); });
+}
+["#h-mes","#h-dest","#h-status","#h-busca"].forEach(s=>$(s).addEventListener("input",renderHist));
+$("#h-mes").value=mesAtual();
+$("#btn-csv").addEventListener("click",()=>{
+  const cm=custoMedio();
+  const lines=[["Data","Código","Colaborador","Destino","Tipo","Quarto/setor","Situação","Material","Quantidade","Unidade","Custo estimado","Liberado por","Entregue em","Retirado por"].join(";")];
+  for(const l of histRows()) for(const i of l.itens){ const p=cm.get(i.nome); lines.push([fmt(l.em),l.codigo,l.nome,destOf(l),tipoOf(l)==="obra"?"Obra":"Alojamento",l.quarto,STATUS_TXT[statusOf(l)],i.nome,i.qtd,i.unidade,p?(p*num(i.qtd)).toFixed(2).replace(".",","):"",l.por,l.entrega?fmt(l.entrega.em):"",l.entrega?l.entrega.retiradoPor:""].map(csvCell).join(";")); }
+  baixarCSV(`material-limpeza-${$("#h-mes").value||"todos"}.csv`, lines);
+});
+
+/* ---------- Cadastros ---------- */
+function renderCad(){
+  if(!D) return;
+  const cm=custoMedio(), ms=mats();
+  $("#cad-mat").innerHTML = ms.length ? `<table><thead><tr><th>Material</th><th>Unidade</th><th class="n">Mínimo</th><th class="n">Ideal</th><th class="n">Ref. por pessoa/mês</th><th class="n">Custo médio</th><th></th></tr></thead><tbody>${ms.map(m=>`<tr>
+      <td><strong>${esc(m.nome)}</strong></td><td>${esc(m.unidade)}</td>
+      <td class="n"><input type="number" min="0" class="cad-num" value="${esc(num(m.estoqueMin)||"")}" data-mat="${esc(m.nome)}" data-campo="estoqueMin" aria-label="Estoque mínimo de ${esc(m.nome)}"></td>
+      <td class="n"><input type="number" min="0" class="cad-num" value="${esc(num(m.estoqueIdeal)||"")}" placeholder="${num(m.estoqueMin)?num(m.estoqueMin)*2:""}" data-mat="${esc(m.nome)}" data-campo="estoqueIdeal" aria-label="Estoque ideal de ${esc(m.nome)}"></td>
+      <td class="n"><input type="number" min="0" step="0.1" class="cad-num" value="${esc(num(m.refPessoaMes)||"")}" data-mat="${esc(m.nome)}" data-campo="refPessoaMes" aria-label="Referência por pessoa por mês de ${esc(m.nome)}"></td>
+      <td class="n">${money(cm.get(m.nome)||0)}</td>
+      <td><button class="lz-btn link" data-rm-mat="${esc(m.nome)}">Remover</button></td></tr>`).join("")}</tbody></table>` : `<p class="meta">Nenhum material cadastrado.</p>`;
+  document.querySelectorAll("#cad-mat [data-campo]").forEach(inp=>inp.onchange=async()=>{
+    const nome=inp.dataset.mat, campo=inp.dataset.campo, v=Math.max(0, parseFloat(String(inp.value).replace(",","."))||0);
+    if(await alterar(d=>{ const m=d.catalogo.materiais.find(x=>x.nome===nome); if(!m) return false; m[campo]=v; }, `Cadastro: ${nome} ${campo} = ${v}`)) toast("Salvo.","ok");
+  });
+  document.querySelectorAll("[data-rm-mat]").forEach(b=>b.onclick=async()=>{
+    const nome=b.dataset.rmMat; if(!confirm(`Remover "${nome}" da lista? O histórico continua guardado.`)) return;
+    await alterar(d=>{ d.catalogo.materiais=d.catalogo.materiais.filter(x=>x.nome!==nome); }, `Remove material ${nome}`);
+  });
+
+  const ds=[...destinos()].sort((a,b)=>(a.tipo>b.tipo?1:a.tipo<b.tipo?-1:0)||a.nome.localeCompare(b.nome,"pt-BR"));
+  $("#cad-dest").innerHTML = ds.length ? `<table><thead><tr><th>Destino</th><th>Tipo</th><th class="n">Moradores</th><th></th></tr></thead><tbody>${ds.map(d=>`<tr>
+      <td><strong>${esc(d.nome)}</strong></td>
+      <td><select class="cad-sel" data-dest="${esc(d.nome)}" data-campo="tipo" aria-label="Tipo de ${esc(d.nome)}"><option value="alojamento" ${d.tipo==="alojamento"?"selected":""}>Alojamento</option><option value="obra" ${d.tipo==="obra"?"selected":""}>Obra</option></select></td>
+      <td class="n">${d.tipo==="alojamento"?`<input type="number" min="0" class="cad-num" value="${esc(num(d.moradores)||"")}" data-dest="${esc(d.nome)}" data-campo="moradores" aria-label="Moradores de ${esc(d.nome)}">`:"—"}</td>
+      <td><button class="lz-btn link" data-rm-dest="${esc(d.nome)}">Remover</button></td></tr>`).join("")}</tbody></table>` : `<p class="meta">Nenhum destino cadastrado.</p>`;
+  document.querySelectorAll("#cad-dest [data-campo]").forEach(inp=>inp.onchange=async()=>{
+    const nome=inp.dataset.dest, campo=inp.dataset.campo, v = campo==="tipo" ? inp.value : Math.max(0,parseInt(inp.value,10)||0);
+    if(await alterar(d=>{ const x=d.catalogo.destinos.find(y=>y.nome===nome); if(!x) return false; x[campo]=v; }, `Destino: ${nome} ${campo} = ${v}`)) toast("Salvo.","ok");
+  });
+  document.querySelectorAll("[data-rm-dest]").forEach(b=>b.onclick=async()=>{
+    const nome=b.dataset.rmDest; if(!confirm(`Remover o destino "${nome}"? O histórico continua guardado.`)) return;
+    await alterar(d=>{ d.catalogo.destinos=d.catalogo.destinos.filter(x=>x.nome!==nome); }, `Remove destino ${nome}`);
+  });
+
+  const adms=D.catalogo.admins;
+  $("#adm-texto").textContent = adms.length
+    ? "Só estes usuários do GitHub podem lançar liberações, fazer contagens, cancelar e mexer nos cadastros. Os demais usam o almoxarifado, registram entradas e consultam estoque, consumo e histórico."
+    : "Nenhum administrador definido: hoje todos com o token podem fazer tudo. Ao adicionar o primeiro, seu usuário entra junto para você não perder o acesso.";
+  $("#cad-adm").innerHTML = adms.map(a=>`<span class="chip">${esc(a)}<button data-rm-adm="${esc(a)}" aria-label="Remover ${esc(a)}">×</button></span>`).join("") || `<p class="meta" style="margin:0">Nenhum administrador.</p>`;
+  document.querySelectorAll("[data-rm-adm]").forEach(b=>b.onclick=async()=>{
+    const a=b.dataset.rmAdm;
+    if(login && a.toLowerCase()===login.toLowerCase() && adms.length>1 && !confirm("Você vai remover a si mesmo e perder o acesso de administrador. Continuar?")) return;
+    await alterar(d=>{ d.catalogo.admins=d.catalogo.admins.filter(x=>x!==a); }, `Remove administrador ${a}`);
+    renderPermissoes();
+  });
+}
+$("#add-mat").onclick=async()=>{
+  const nome=$("#novo-mat").value.trim(), un=$("#novo-un").value.trim()||"unidade";
+  if(!nome){ toast("Informe o nome do material.","err"); return; }
+  const ok=await alterar(d=>{ if(d.catalogo.materiais.some(x=>x.nome.toLowerCase()===nome.toLowerCase())){ toast("Esse material já está cadastrado.","err"); return false; } d.catalogo.materiais.push({nome,unidade:un,estoqueMin:0,estoqueIdeal:0,refPessoaMes:0}); d.catalogo.materiais.sort((a,b)=>a.nome.localeCompare(b.nome,"pt-BR")); }, `Adiciona material ${nome}`);
+  if(ok){ $("#novo-mat").value=""; $("#novo-un").value=""; toast("Material adicionado.","ok"); }
+};
+$("#add-dest").onclick=async()=>{
+  const nome=$("#novo-dest").value.trim(), tipo=$("#novo-dest-tipo").value, mor=Math.max(0,parseInt($("#novo-dest-mor").value,10)||0);
+  if(!nome){ toast("Informe o nome do destino.","err"); return; }
+  const ok=await alterar(d=>{ if(d.catalogo.destinos.some(x=>x.nome.toLowerCase()===nome.toLowerCase())){ toast("Esse destino já existe.","err"); return false; } d.catalogo.destinos.push({nome, tipo, moradores: tipo==="alojamento"?mor:0}); }, `Adiciona destino ${nome}`);
+  if(ok){ $("#novo-dest").value=""; $("#novo-dest-mor").value=""; toast("Destino adicionado.","ok"); }
+};
+$("#novo-dest-tipo").addEventListener("change",e=>{ $("#novo-dest-mor").style.display = e.target.value==="alojamento" ? "" : "none"; });
+$("#add-adm").onclick=async()=>{
+  const a=$("#novo-adm").value.trim().replace(/^@/,"");
+  if(!a){ toast("Informe o usuário do GitHub.","err"); return; }
+  const ok=await alterar(d=>{
+    const l=d.catalogo.admins.map(x=>x.toLowerCase());
+    if(!l.length && login && login.toLowerCase()!==a.toLowerCase()) d.catalogo.admins.push(login);
+    if(l.includes(a.toLowerCase())){ toast("Esse usuário já é administrador."); return false; }
+    d.catalogo.admins.push(a);
+  }, `Adiciona administrador ${a}`);
+  if(ok){ $("#novo-adm").value=""; toast("Administrador adicionado.","ok"); renderPermissoes(); }
+};
+
+/* ---------- Início ---------- */
+function renderTudo(forceForm){
+  const n=mats().length + ":" + destinos().map(d=>d.nome+d.tipo+num(d.moradores)).join(",");
+  if(forceForm || n!==prevMatLen){ if(String(n).split(":")[0]!==String(prevMatLen).split(":")[0]) form.qtd={}; prevMatLen=n; renderForm(); }
+  renderPermissoes(); renderMovForm(); renderLibAlerta(); renderRet(true); renderEstoque(); renderConsumo(); renderHist(); renderCad();
+}
+async function iniciarLimpeza(){
+  document.getElementById("menuScreen").style.display="none";
+  document.getElementById("appScreen").style.display="none";
+  document.getElementById("limpezaScreen").style.display="block";
+  document.title="Material de Limpeza";
+  const pedida=(location.hash||"").replace(/^#limpeza-?/,"");
+  renderTudo(true);
+  try{ const r=await ghRequest("https://api.github.com/user"); if(r.ok) login=(await r.json()).login||""; }catch(e){}
+  await carregar();
+  renderTudo(true);
+  go(pedida);
+  document.addEventListener("visibilitychange", ()=>{ if(!document.hidden) atualizarRemoto(); });
+  setInterval(atualizarRemoto, 30000);
+}
+if(location.hash.startsWith("#limpeza")) iniciarLimpeza();
+})();
 </script>
 </body>
 </html>
